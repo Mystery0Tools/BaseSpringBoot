@@ -1,6 +1,8 @@
 plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'java'
 }
+apply plugin: 'io.spring.dependency-management'
 
 group 'vip.mystery0.base'
 version '1.0.0'
@@ -9,9 +11,11 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework:spring-aspects'
     implementation 'vip.mystery0.tools:java.tools:1.1.0'
 }
