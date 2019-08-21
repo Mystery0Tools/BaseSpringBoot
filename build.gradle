@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'vip.mystery0.base'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'vip.mystery0.tools:java.tools:1.1.0'
+}
