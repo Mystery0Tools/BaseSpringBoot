@@ -49,7 +49,7 @@ public abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public Response<Object> handleMethodArgumentTypeMismatchException() {
-        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase() + ", 参数类型不匹配！");
+        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response<Object> handleMissingServletRequestParameterException() {
-        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase() + ", 参数错误！");
+        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
     /**
@@ -85,7 +85,7 @@ public abstract class BaseGlobalExceptionHandler {
         log.info("║ " + TimeUtil.toDateTimeString(Calendar.getInstance()));
         log.info("║ " + request.getMethod() + " " + request.getRequestURI());
         if (!"".equals(args)) {
-            log.info("║ 参数: 【" + params + "】");
+            log.info("║ params: 【" + params + "】");
         }
         log.info("║ IP: " + IPUtil.getClientIP(request));
         log.info("╙───────────");

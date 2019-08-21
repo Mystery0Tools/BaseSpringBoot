@@ -45,7 +45,6 @@ public class WebLogAspect {
 
     @Before("webLog()")
     private void doBeforeWeb(JoinPoint joinPoint) {
-        // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         List<String> params = new ArrayList<>();
@@ -61,12 +60,11 @@ public class WebLogAspect {
         });
         String args = StringUtils.join(params);
 
-        //记录下请求内容
         log.info("╔═══════════");
         log.info("║ " + TimeUtil.toDateTimeString(Calendar.getInstance()));
         log.info("║ " + request.getMethod() + " " + request.getRequestURI());
         if (!"".equals(args)) {
-            log.info("║ 参数: 【" + params + "】");
+            log.info("║ params: 【" + params + "】");
         }
         log.info("║ IP: " + IPUtil.getClientIP(request));
         log.info("╙───────────");
@@ -75,14 +73,14 @@ public class WebLogAspect {
     @AfterReturning(returning = "ret", pointcut = "webLog()")
     private void doAfterWebReturning(Object ret) {
         log.info("╓───────────");
-        log.info("║ 返回数据: " + JsonFactory.toJson(ret));
+        log.info("║ return: " + JsonFactory.toJson(ret));
         log.info("╚═══════════");
     }
 
     @AfterReturning(returning = "ret", pointcut = "handleError()")
     private void doAfterErrorReturning(Response<Object> ret) {
         log.info("╓───────────");
-        log.info("║ 返回数据: " + JsonFactory.toJson(ret));
+        log.info("║ return: " + JsonFactory.toJson(ret));
         log.info("╚═══════════");
     }
 }
