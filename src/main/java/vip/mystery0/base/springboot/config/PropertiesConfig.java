@@ -19,4 +19,11 @@ public class PropertiesConfig {
     public String getWebLogPoint() {
         return webLogPoint;
     }
+
+    @Value("${mystery0.redis.key-prefix}")
+    private String redisPrefix;
+
+    public String getRedisPrefix() {
+        return redisPrefix;
+    }
 }

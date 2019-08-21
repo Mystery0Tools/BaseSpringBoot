@@ -1,4 +1,6 @@
 mystery0:
+  redis:
+    key-prefix: mystery0
   request:
     log:
       max-length: 12
