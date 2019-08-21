@@ -14,9 +14,9 @@ public class PropertiesConfig {
     }
 
     @Value("${mystery0.web.log.point}")
-    private int webLogPoint;
+    private String webLogPoint;
 
-    public int getWebLogPoint() {
+    public String getWebLogPoint() {
         return webLogPoint;
     }
 }
