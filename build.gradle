@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
+}
+
 plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'java'
@@ -19,3 +28,6 @@ dependencies {
     implementation 'org.springframework:spring-aspects'
     implementation 'vip.mystery0.tools:java.tools:1.1.0'
 }
+
+// 在底部加上这句
+apply from: 'push.gradle'
