@@ -47,6 +47,7 @@ public class RedisService {
      * @param key    键
      * @param tClass 返回数据类型
      * @param <T>    数据类型
+     * @return 原始数据
      */
     public <T> T getFromRedis(String key,
                               Class<T> tClass) {
