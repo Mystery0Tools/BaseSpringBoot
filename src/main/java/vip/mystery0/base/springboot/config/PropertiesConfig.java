@@ -3,10 +3,6 @@ package vip.mystery0.base.springboot.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-/**
- * @author mystery0
- * @date 2019-08-13
- */
 @Component
 public class PropertiesConfig {
 

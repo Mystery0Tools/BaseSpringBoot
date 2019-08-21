@@ -23,10 +23,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * @author mystery0
- * @date 2019-08-13
- */
 @RestControllerAdvice
 public abstract class BaseGlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(BaseGlobalExceptionHandler.class);
@@ -34,36 +30,24 @@ public abstract class BaseGlobalExceptionHandler {
     @Autowired
     private PropertiesConfig propertiesConfig;
 
-    /**
-     * 400 - Bad Request
-     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
     public Response<Object> handleValidationException() {
         return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
-    /**
-     * 400 - Bad Request
-     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public Response<Object> handleMethodArgumentTypeMismatchException() {
         return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
-    /**
-     * 400 - Bad Request
-     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response<Object> handleMissingServletRequestParameterException() {
         return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
-    /**
-     * 404 - Not Found
-     */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public Response<Object> handleNoHandlerFoundException(HttpServletRequest request) {
@@ -80,7 +64,6 @@ public abstract class BaseGlobalExceptionHandler {
         });
         String args = StringUtils.join(params);
 
-        //记录下请求内容
         log.info("╔═══════════");
         log.info("║ " + TimeUtil.toDateTimeString(Calendar.getInstance()));
         log.info("║ " + request.getMethod() + " " + request.getRequestURI());
@@ -92,18 +75,12 @@ public abstract class BaseGlobalExceptionHandler {
         return ResponseFactory.failure(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
     }
 
-    /**
-     * 405 - Method Not Allowed
-     */
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<Object> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResponseFactory.failure(HttpStatus.METHOD_NOT_ALLOWED.value(), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
     }
 
-    /**
-     * 500 - Internal Server Error
-     */
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public Response<Object> defaultErrorHandler(Exception e) {

@@ -23,10 +23,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @author mystery0
- * @date 2019-08-13
- */
 @Aspect
 @Component
 public class WebLogAspect {
