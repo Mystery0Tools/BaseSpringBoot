@@ -35,6 +35,10 @@ public class RedisService {
     public void putIntoRedis(String key, Object value) {
         try {
             String redisKey = getRedisKey(key);
+            if (value == null) {
+                log.warn("put into redis but value is null, key: {}", redisKey);
+                return;
+            }
             String redisValue = JsonFactory.toJson(value);
             log.debug("put into redis, key: {}, value: {}", redisKey, redisValue);
             redisTemplate.opsForValue().set(redisKey, redisValue);
@@ -58,6 +62,9 @@ public class RedisService {
             log.debug("get key value from redis, key: {}", redisKey);
             String redisValue = redisTemplate.opsForValue().get(redisKey);
             log.debug("get value: {}", redisValue);
+            if (redisValue == null) {
+                return null;
+            }
             return JsonFactory.fromJson(redisValue, tClass);
         } catch (Exception e) {
             log.error("get key value from redis error", e);
