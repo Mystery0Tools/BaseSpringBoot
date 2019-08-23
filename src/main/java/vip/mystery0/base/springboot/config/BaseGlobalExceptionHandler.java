@@ -64,14 +64,14 @@ public abstract class BaseGlobalExceptionHandler {
         });
         String args = StringUtils.join(params);
 
-        log.info("╔═══════════");
+        log.info("╔══════════════════════");
         log.info("║ " + TimeUtil.toDateTimeString(Calendar.getInstance()));
         log.info("║ " + request.getMethod() + " " + request.getRequestURI());
         if (!"".equals(args)) {
             log.info("║ params: 【" + params + "】");
         }
         log.info("║ IP: " + IPUtil.getClientIP(request));
-        log.info("╙───────────");
+        log.info("╙──────────────────────");
         return ResponseFactory.failure(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
     }
 

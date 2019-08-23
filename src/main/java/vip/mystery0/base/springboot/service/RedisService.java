@@ -40,7 +40,7 @@ public class RedisService {
                 return;
             }
             String redisValue = JsonFactory.toJson(value);
-            log.debug("put into redis, key: {}, value: {}", redisKey, redisValue);
+            log.info("put into redis, key: {}, value: {}", redisKey, redisValue);
             redisTemplate.opsForValue().set(redisKey, redisValue);
         } catch (Exception e) {
             log.error("put into redis failed", e);
@@ -59,9 +59,9 @@ public class RedisService {
                               Class<T> tClass) {
         try {
             String redisKey = getRedisKey(key);
-            log.debug("get key value from redis, key: {}", redisKey);
+            log.info("get key value from redis, key: {}", redisKey);
             String redisValue = redisTemplate.opsForValue().get(redisKey);
-            log.debug("get value: {}", redisValue);
+            log.info("get value: {}", redisValue);
             if (redisValue == null) {
                 return null;
             }
@@ -81,7 +81,7 @@ public class RedisService {
     public void updateRedisKeyExpire(String key,
                                      long expireTime) {
         String redisKey = getRedisKey(key);
-        log.debug("update redis key expire time, key: {}, expire time: {}", redisKey, expireTime);
+        log.info("update redis key expire time, key: {}, expire time: {}", redisKey, expireTime);
         try {
             redisTemplate.expire(redisKey, expireTime, TimeUnit.MILLISECONDS);
         } catch (Exception e) {

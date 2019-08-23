@@ -20,6 +20,13 @@ public class PropertiesConfig {
         return webLogPoint;
     }
 
+    @Value("${mystery0.exception.log.point}")
+    private String exceptionLogPoint;
+
+    public String getExceptionLogPoint() {
+        return exceptionLogPoint;
+    }
+
     @Value("${mystery0.redis.key-prefix}")
     private String redisPrefix;
 
