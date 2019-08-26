@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import vip.mystery0.base.springboot.config.PropertiesConfig;
 import vip.mystery0.tools.java.factory.JsonFactory;
 
-import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -19,7 +18,7 @@ public class RedisService {
 
     @Autowired
     private PropertiesConfig propertiesConfig;
-    @Resource
+    @Autowired
     private StringRedisTemplate redisTemplate;
 
     public String getRedisKey(String key) {
