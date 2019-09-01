@@ -13,20 +13,6 @@ public class PropertiesConfig {
         return logMaxLength;
     }
 
-    @Value("${mystery0.web.log.point}")
-    private String webLogPoint;
-
-    public String getWebLogPoint() {
-        return webLogPoint;
-    }
-
-    @Value("${mystery0.exception.log.point}")
-    private String exceptionLogPoint;
-
-    public String getExceptionLogPoint() {
-        return exceptionLogPoint;
-    }
-
     @Value("${mystery0.redis.key-prefix}")
     private String redisPrefix;
 
