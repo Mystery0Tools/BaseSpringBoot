@@ -2,14 +2,8 @@ package vip.mystery0.base.springboot.config;
 
 import org.apache.tomcat.util.buf.StringUtils;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import vip.mystery0.tools.java.factory.JsonFactory;
@@ -23,30 +17,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-@Aspect
-@Component
 public class WebLogAspect {
     private static final Logger log = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Autowired
-    private PropertiesConfig propertiesConfig;
-
-    @Pointcut("execution(public * PropertiesConfig.getWebLogPoint())")
-    private void webLog() {
-    }
-
-    @Pointcut("execution(public * PropertiesConfig.getExceptionLogPoint())")
-    private void handleError() {
-    }
-
-    @Before("webLog()")
-    private void doBeforeWeb(JoinPoint joinPoint) {
+    private static void doBeforeWeb(JoinPoint joinPoint, int maxLength) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         List<String> params = new ArrayList<>();
         request.getParameterMap().forEach((s, strings) -> {
             String value = StringUtils.join(strings);
-            if (value.length() > propertiesConfig.getLogMaxLength()) {
+            if (value.length() > maxLength) {
                 String start = value.substring(0, 4);
                 String end = value.substring(value.length() - 4);
                 params.add(s + "=>" + start + "...." + end);
@@ -66,15 +46,13 @@ public class WebLogAspect {
         log.info("╙──────────────────────");
     }
 
-    @AfterReturning(returning = "ret", pointcut = "webLog()")
-    private void doAfterWebReturning(Object ret) {
+    private static void doAfterWebReturning(Object ret) {
         log.info("╓──────────────────────");
         log.info("║ return: " + JsonFactory.toJson(ret));
         log.info("╚══════════════════════");
     }
 
-    @AfterReturning(returning = "ret", pointcut = "handleError()")
-    private void doAfterErrorReturning(Response<Object> ret) {
+    private static void doAfterErrorReturning(Response<Object> ret) {
         log.info("╓──────────────────────");
         log.info("║ return: " + JsonFactory.toJson(ret));
         log.info("╚══════════════════════");
