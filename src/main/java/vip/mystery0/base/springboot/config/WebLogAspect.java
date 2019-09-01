@@ -20,7 +20,7 @@ import java.util.Objects;
 public class WebLogAspect {
     private static final Logger log = LoggerFactory.getLogger(WebLogAspect.class);
 
-    private static void doBeforeWeb(JoinPoint joinPoint, int maxLength) {
+    public static void doBeforeWeb(JoinPoint joinPoint, int maxLength) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         List<String> params = new ArrayList<>();
@@ -46,13 +46,13 @@ public class WebLogAspect {
         log.info("╙──────────────────────");
     }
 
-    private static void doAfterWebReturning(Object ret) {
+    public static void doAfterWebReturning(Object ret) {
         log.info("╓──────────────────────");
         log.info("║ return: " + JsonFactory.toJson(ret));
         log.info("╚══════════════════════");
     }
 
-    private static void doAfterErrorReturning(Response<Object> ret) {
+    public static void doAfterErrorReturning(Response<Object> ret) {
         log.info("╓──────────────────────");
         log.info("║ return: " + JsonFactory.toJson(ret));
         log.info("╚══════════════════════");
