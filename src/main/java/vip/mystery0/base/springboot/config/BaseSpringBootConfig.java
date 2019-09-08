@@ -6,9 +6,10 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import vip.mystery0.base.springboot.service.RedisService;
+import vip.mystery0.base.springboot.utils.SnowflakeIdWorker;
 
 @Configuration
-public class RedisConfig {
+public class BaseSpringBootConfig {
     @Bean
     public RedisService redisService() {
         return new RedisService();
