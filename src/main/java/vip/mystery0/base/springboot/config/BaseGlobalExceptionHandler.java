@@ -84,13 +84,7 @@ public abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public Response<Object> defaultErrorHandler(Exception e) {
-        Response<Object> response = dispatch(e);
-        if (response != null) {
-            return response;
-        }
         log.error("", e);
         return ResponseFactory.failure(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
-
-    public abstract Response<Object> dispatch(Exception e);
 }
