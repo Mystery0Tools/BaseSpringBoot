@@ -80,11 +80,4 @@ public abstract class BaseGlobalExceptionHandler {
     public Response<Object> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResponseFactory.failure(HttpStatus.METHOD_NOT_ALLOWED.value(), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
     }
-
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
-    public Response<Object> defaultErrorHandler(Exception e) {
-        log.error("", e);
-        return ResponseFactory.failure(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-    }
 }
