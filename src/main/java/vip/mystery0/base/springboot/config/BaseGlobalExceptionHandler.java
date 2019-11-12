@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,12 +24,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * @author mystery0
+ */
 @RestControllerAdvice
 public abstract class BaseGlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(BaseGlobalExceptionHandler.class);
 
     @Autowired
-    private PropertiesConfig propertiesConfig;
+    private BasePropertiesConfig propertiesConfig;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
@@ -79,5 +83,11 @@ public abstract class BaseGlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<Object> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         return ResponseFactory.failure(HttpStatus.METHOD_NOT_ALLOWED.value(), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(BindException.class)
+    public Response<Object> handleBindException(BindException e) {
+        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
     }
 }
