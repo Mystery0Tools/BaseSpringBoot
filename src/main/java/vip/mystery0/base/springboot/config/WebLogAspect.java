@@ -19,9 +19,24 @@ import java.util.Objects;
 public class WebLogAspect {
     private static final Logger log = LoggerFactory.getLogger(WebLogAspect.class);
 
-    public static void doBeforeWeb(ProceedingJoinPoint joinPoint, int maxLength) throws Throwable {
+    public static void doWebLog(ProceedingJoinPoint joinPoint, int maxLength) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
+        logRequest(request, log, maxLength);
+        long start = System.currentTimeMillis();
+        Object result = joinPoint.proceed();
+        log.info("╓──────────────────────");
+        log.info("║ request cost time: " + (System.currentTimeMillis() - start) + " ms");
+        String json = JsonFactory.toJson(result);
+        if (json != null) {
+            log.info("║ return: " + json);
+        }
+        log.info("╚══════════════════════");
+    }
+
+    public static void logRequest(HttpServletRequest request,
+                                  Logger log,
+                                  int maxLength) {
         List<String> params = new ArrayList<>();
         request.getParameterMap().forEach((s, strings) -> {
             String value = StringUtils.join(strings);
@@ -43,11 +58,5 @@ public class WebLogAspect {
         }
         log.info("║ IP: " + IPUtil.getClientIP(request));
         log.info("╙──────────────────────");
-        long start = System.currentTimeMillis();
-        Object result = joinPoint.proceed();
-        log.info("╓──────────────────────");
-        log.info("║ request cost time: " + (System.currentTimeMillis() - start) + " ms");
-        log.info("║ return: " + JsonFactory.toJson(result));
-        log.info("╚══════════════════════");
     }
 }
