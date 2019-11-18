@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=vip.mystery0.base.springboot.BaseAutoConfiguration
