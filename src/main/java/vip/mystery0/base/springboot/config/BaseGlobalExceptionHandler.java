@@ -26,7 +26,7 @@ public abstract class BaseGlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(BaseGlobalExceptionHandler.class);
 
     @Autowired
-    private BasePropertiesConfig propertiesConfig;
+    private BaseProperties properties;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
@@ -49,7 +49,7 @@ public abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public Response<Object> handleNoHandlerFoundException(HttpServletRequest request) {
-        WebLogAspect.logRequest(request, log, propertiesConfig.getLogMaxLength());
+        WebLogAspect.logRequest(request, log, properties.getLogMaxLength());
         return ResponseFactory.failure(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
     }
 

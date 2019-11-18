@@ -34,9 +34,9 @@ public class WebLogAspect {
         log.info("╚══════════════════════");
     }
 
-    public static void logRequest(HttpServletRequest request,
-                                  Logger log,
-                                  int maxLength) {
+    static void logRequest(HttpServletRequest request,
+                           Logger log,
+                           int maxLength) {
         List<String> params = new ArrayList<>();
         request.getParameterMap().forEach((s, strings) -> {
             String value = StringUtils.join(strings);

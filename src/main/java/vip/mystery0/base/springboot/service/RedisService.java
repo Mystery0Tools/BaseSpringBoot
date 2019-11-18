@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import vip.mystery0.base.springboot.config.BasePropertiesConfig;
+import vip.mystery0.base.springboot.config.BaseProperties;
 import vip.mystery0.tools.java.factory.JsonFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -17,12 +17,12 @@ public class RedisService {
     private static final Logger log = LoggerFactory.getLogger(RedisService.class);
 
     @Autowired
-    private BasePropertiesConfig propertiesConfig;
+    private BaseProperties properties;
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     public String getRedisKey(String key) {
-        return propertiesConfig.getRedisPrefix() + ":" + key;
+        return properties.getRedisPrefix() + ":" + key;
     }
 
     /**
