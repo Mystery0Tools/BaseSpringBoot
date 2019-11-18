@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import vip.mystery0.base.springboot.model.ServiceApiException;
 import vip.mystery0.base.springboot.utils.rest.JSON;
 import vip.mystery0.base.springboot.utils.rest.RestTemplatePlus;
+import vip.mystery0.base.springboot.utils.rest.handler.RestResponseErrorHandler;
+import vip.mystery0.base.springboot.utils.rest.interceptor.LoggingClientHttpRequestInterceptor;
 import vip.mystery0.tools.java.factory.JsonFactory;
 import vip.mystery0.tools.kotlin.model.Response;
 
@@ -16,12 +19,10 @@ import vip.mystery0.tools.kotlin.model.Response;
  */
 @Service
 public class RestPlusService {
-    private static final Logger log = LoggerFactory.getLogger(RestPlusService.class);
-
     private RestTemplatePlus<Response> restTemplatePlus;
 
     public RestPlusService() {
-        restTemplatePlus = new RestTemplatePlus<>(e -> {
+        restTemplatePlus = new RestTemplatePlus<>(createRestTemplate(), e -> {
             throw new ServiceApiException(e);
         }, new JSON() {
             @Override
@@ -39,6 +40,13 @@ public class RestPlusService {
                 return JsonFactory.toJson(obj);
             }
         });
+    }
+
+    private static RestTemplate createRestTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getInterceptors().add(new LoggingClientHttpRequestInterceptor());
+        restTemplate.setErrorHandler(new RestResponseErrorHandler());
+        return restTemplate;
     }
 
     public void get(String url,
