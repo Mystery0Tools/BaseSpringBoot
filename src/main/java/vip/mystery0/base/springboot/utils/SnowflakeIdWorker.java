@@ -2,11 +2,13 @@ package vip.mystery0.base.springboot.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 53 bits unique id:
@@ -27,17 +29,18 @@ import java.util.Random;
  * <p>
  * It can generate 64k unique id per IP and up to 2106-02-07T06:28:15Z.
  */
-@Component
 public class SnowflakeIdWorker {
-        private static final Logger logger = LoggerFactory.getLogger(SnowflakeIdWorker.class);
+    private static final Logger logger = LoggerFactory.getLogger(SnowflakeIdWorker.class);
+    private static final Pattern PATTERN_HOSTNAME = Pattern.compile("^.*\\D+([0-9]+)$");
     private final long startEpoch = LocalDate.of(2019, 1, 1).atStartOfDay(ZoneId.of("Asia/Shanghai")).toEpochSecond();
-    private long workerId = -1L;
+    private long workerId;
     private static final long MAX_WORKER_ID = ~(-1L << 5);
     private long offset = 0L;
     private static final long MAX_OFFSET = ~(-1L << 16);
     private long lastEpoch = -1L;
 
     public SnowflakeIdWorker() {
+        this(getWorkerIdByNetworkAddress());
     }
 
     public SnowflakeIdWorker(long workerId) {
@@ -45,6 +48,20 @@ public class SnowflakeIdWorker {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }
         this.workerId = workerId;
+    }
+
+    private static long getWorkerIdByNetworkAddress() {
+        try {
+            String hostname = InetAddress.getLocalHost().getHostName();
+            Matcher matcher = PATTERN_HOSTNAME.matcher(hostname);
+            if (matcher.matches()) {
+                long n = Long.parseLong(matcher.group(1));
+                return n & 8;
+            }
+        } catch (UnknownHostException e) {
+            logger.warn("unable to get host name. set server id = 0.");
+        }
+        return 0L;
     }
 
     public long nextId() {
@@ -67,11 +84,7 @@ public class SnowflakeIdWorker {
             logger.warn("maximum id reached in 1 second in epoch: " + epochSecond);
             return nextId(epochSecond + 1);
         }
-        if (workerId == -1L) {
-            return generateId(epochSecond, next, new Random().nextInt(32));
-        } else {
-            return generateId(epochSecond, next, workerId);
-        }
+        return generateId(epochSecond, next, workerId);
     }
 
     private void reset() {
