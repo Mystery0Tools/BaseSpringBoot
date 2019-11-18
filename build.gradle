@@ -8,10 +8,12 @@ buildscript {
 }
 
 plugins {
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
 }
 
-group 'vip.mystery0.base'
+group 'vip.mystery0'
 version "$POM_VERSION"
 
 sourceCompatibility = 1.8
@@ -23,14 +25,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'org.springframework:spring-web:5.1.9.RELEASE'
-    compileOnly 'org.springframework:spring-context:5.1.9.RELEASE'
-    compileOnly 'org.springframework:spring-aspects:5.1.9.RELEASE'
-    compileOnly 'org.springframework:spring-webmvc:5.1.9.RELEASE'
-    compileOnly 'org.springframework.data:spring-data-redis:2.1.10.RELEASE'
-    compileOnly 'org.slf4j:slf4j-api:1.7.26'
-    compileOnly 'org.apache.tomcat.embed:tomcat-embed-core:9.0.22'
-    implementation 'vip.mystery0.tools:java.tools:1.1.4'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'vip.mystery0.tools:java.tools:1.1.7'
+    compileOnly 'org.springframework.data:spring-data-redis'
+    compileOnly 'org.springframework:spring-aspects'
 }
 
 // 在底部加上这句
