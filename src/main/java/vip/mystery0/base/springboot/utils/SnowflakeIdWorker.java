@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +46,8 @@ public class SnowflakeIdWorker {
 
     public SnowflakeIdWorker(long workerId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
+            logger.warn("worker Id can't be greater than {} or less than 0", MAX_WORKER_ID);
+            workerId = workerId & MAX_WORKER_ID;
         }
         this.workerId = workerId;
     }
@@ -56,12 +58,14 @@ public class SnowflakeIdWorker {
             Matcher matcher = PATTERN_HOSTNAME.matcher(hostname);
             if (matcher.matches()) {
                 long n = Long.parseLong(matcher.group(1));
-                return n & 8;
+                return n & MAX_WORKER_ID;
             }
         } catch (UnknownHostException e) {
-            logger.warn("unable to get host name. set server id = 0.");
+            logger.warn("unable to get host name. set server id to random.");
         }
-        return 0L;
+        long workerId = new Random().nextInt((int) MAX_WORKER_ID);
+        logger.info("generate worker id = {}", workerId);
+        return workerId;
     }
 
     public long nextId() {
