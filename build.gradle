@@ -10,11 +10,9 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version '2.2.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'java'
 }
-
-group 'vip.mystery0'
-version "$POM_VERSION"
 
 sourceCompatibility = 1.8
 
@@ -25,11 +23,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'vip.mystery0.tools:java.tools:1.1.7'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.springframework.data:spring-data-redis'
     compileOnly 'org.springframework:spring-aspects'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 }
 
 // 在底部加上这句
