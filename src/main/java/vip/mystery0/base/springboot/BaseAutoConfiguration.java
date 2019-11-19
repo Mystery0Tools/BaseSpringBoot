@@ -10,7 +10,6 @@ import vip.mystery0.base.springboot.utils.SnowflakeIdWorker;
 
 /**
  * @author mystery0
- * @date 2019/11/16
  */
 @Configuration
 @EnableConfigurationProperties(BaseProperties.class)

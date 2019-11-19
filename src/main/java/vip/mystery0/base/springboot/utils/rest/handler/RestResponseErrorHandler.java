@@ -10,7 +10,6 @@ import java.io.IOException;
 
 /**
  * @author mystery0
- * @date 2019/11/18
  */
 public class RestResponseErrorHandler implements ResponseErrorHandler {
     private static final Logger log = LoggerFactory.getLogger(RestResponseErrorHandler.class);

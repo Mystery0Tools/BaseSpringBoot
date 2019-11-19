@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * @author mystery0
- * @date 2019/11/18
  */
 public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
     private static final Logger log = LoggerFactory.getLogger(LoggingClientHttpRequestInterceptor.class);
