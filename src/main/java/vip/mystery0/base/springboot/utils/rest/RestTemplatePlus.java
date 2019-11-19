@@ -18,8 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * @author 邓易林
- * @date 2019/11/15
+ * @author Mystery0
  */
 public class RestTemplatePlus<EXCEPTION> {
     private static final Logger logger = LoggerFactory.getLogger(RestTemplatePlus.class);

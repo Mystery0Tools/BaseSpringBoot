@@ -3,7 +3,7 @@ package vip.mystery0.base.springboot.utils.rest;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 /**
- * @author 邓易林
+ * @author Mystery0
  */
 public interface JSON {
     <T> T fromJson(String json, Class<T> clazz);

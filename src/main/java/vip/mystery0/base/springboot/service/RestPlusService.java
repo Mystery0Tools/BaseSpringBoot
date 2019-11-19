@@ -14,7 +14,7 @@ import vip.mystery0.tools.java.factory.JsonFactory;
 import vip.mystery0.tools.kotlin.model.Response;
 
 /**
- * @author 邓易林
+ * @author Mystery0
  */
 @Service
 public class RestPlusService {
