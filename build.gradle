@@ -10,6 +10,7 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version '2.2.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'java'
 }
 
@@ -27,10 +28,6 @@ dependencies {
     compileOnly 'org.springframework.data:spring-data-redis'
     compileOnly 'org.springframework:spring-aspects'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-}
-
-bootJar {
-    enabled = false
 }
 
 // 在底部加上这句
