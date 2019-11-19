@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author mystery0
- * @date 2019/11/16
  */
 @ConfigurationProperties(prefix = "base-config")
 public class BaseProperties {
