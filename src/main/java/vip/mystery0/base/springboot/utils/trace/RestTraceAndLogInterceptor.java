@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author mystery0
- * @date 2019/11/29
  */
 public class RestTraceAndLogInterceptor implements HandlerInterceptor {
 

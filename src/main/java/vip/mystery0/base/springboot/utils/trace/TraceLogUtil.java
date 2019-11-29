@@ -15,7 +15,6 @@ import java.util.List;
 
 /**
  * @author mystery0
- * @date 2019/11/29
  */
 public class TraceLogUtil {
     private static final Logger log = LoggerFactory.getLogger(TraceLogUtil.class);
