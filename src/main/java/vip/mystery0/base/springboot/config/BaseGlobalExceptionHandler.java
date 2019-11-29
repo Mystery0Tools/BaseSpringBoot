@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import vip.mystery0.base.springboot.utils.trace.TraceLogUtil;
 import vip.mystery0.tools.kotlin.factory.ResponseFactory;
 import vip.mystery0.tools.kotlin.model.Response;
 
@@ -49,7 +50,7 @@ public abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public Response<Object> handleNoHandlerFoundException(HttpServletRequest request) {
-        WebLogAspect.logRequest(request, log, properties.getLogMaxLength());
+        TraceLogUtil.logRequest(request, properties.getLogMaxLength());
         return ResponseFactory.failure(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
     }
 

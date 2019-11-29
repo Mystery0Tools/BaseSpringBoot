@@ -22,7 +22,7 @@ public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInt
         return execution.execute(request, body);
     }
 
-    private void traceRequest(HttpRequest request, byte[] body) throws IOException {
+    private void traceRequest(HttpRequest request, byte[] body) {
         log.debug("===========================request begin================================================");
         log.debug("URI         : {}", request.getURI());
         log.debug("Method      : {}", request.getMethod());
