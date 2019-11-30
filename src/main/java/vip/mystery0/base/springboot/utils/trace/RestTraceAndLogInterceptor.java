@@ -30,5 +30,6 @@ public class RestTraceAndLogInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         TraceLogUtil.logResponse(null);
+        TraceHelper.endTrace();
     }
 }
