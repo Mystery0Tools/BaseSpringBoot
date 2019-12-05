@@ -41,7 +41,7 @@ public class TraceLogUtil {
         String args = StringUtils.join(params);
 
         log.info("╔══════════════════════");
-        log.info("║ {}", TimeUtil.toDateTimeString(LocalDateTime.now()));
+        log.info("║ {}", TimeUtil.formatDateTime(LocalDateTime.now()));
         log.info("║ {}", MDC.get(Constants.MDC_URI));
         if (!"".equals(args)) {
             log.info("║ params: 【{}】", params);
