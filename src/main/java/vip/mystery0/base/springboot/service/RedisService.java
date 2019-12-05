@@ -11,6 +11,9 @@ import vip.mystery0.tools.java.factory.JsonFactory;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author mystery0
+ */
 @Service
 @Component
 public class RedisService {

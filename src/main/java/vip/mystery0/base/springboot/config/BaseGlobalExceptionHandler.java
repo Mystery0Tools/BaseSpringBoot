@@ -1,7 +1,5 @@
 package vip.mystery0.base.springboot.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -27,8 +25,6 @@ import javax.validation.ValidationException;
  */
 @RestControllerAdvice
 public abstract class BaseGlobalExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(BaseGlobalExceptionHandler.class);
-
     @Autowired
     private BaseProperties properties;
 
