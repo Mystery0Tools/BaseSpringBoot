@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * @author mystery0
@@ -16,18 +17,19 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class ResponseMessageService {
     private static final Logger log = LoggerFactory.getLogger(ResponseMessageService.class);
+    private static final Pattern BRACKET = Pattern.compile("{}");
 
-    private static final ConcurrentHashMap<Locale, ResourceBundle> map = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Locale, ResourceBundle> map = new ConcurrentHashMap<>();
 
-    public static void registerLocaleTranslate(Locale locale, ResourceBundle resourceBundle) {
+    public void registerLocaleTranslate(Locale locale, ResourceBundle resourceBundle) {
         map.put(locale, resourceBundle);
     }
 
-    private static ResourceBundle getResourceBundle(Locale locale) {
+    private ResourceBundle getResourceBundle(Locale locale) {
         return map.get(locale);
     }
 
-    public static String getTranslate(String name, Locale locale, String defaultValue) {
+    public String getTranslate(String name, Locale locale, String defaultValue) {
         ResourceBundle resourceBundle = getResourceBundle(locale);
         if (resourceBundle == null) {
             return defaultValue;
@@ -35,6 +37,14 @@ public class ResponseMessageService {
         String result = resourceBundle.getString(name);
         if (StringUtils.isEmpty(result)) {
             return defaultValue;
+        }
+        return result;
+    }
+
+    public String fillTemplate(String template, Object... params) {
+        String result = template;
+        for (Object param : params) {
+            result = BRACKET.matcher(result).replaceFirst(param.toString());
         }
         return result;
     }
