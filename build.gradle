@@ -13,6 +13,8 @@ plugins {
     id 'java'
 }
 
+group 'vip.mystery0.base.springboot'
+version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
