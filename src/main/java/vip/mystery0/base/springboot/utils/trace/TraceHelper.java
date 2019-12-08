@@ -28,6 +28,11 @@ public class TraceHelper {
         MDC.put(Constants.MDC_URI, request.getMethod() + " " + request.getRequestURI());
         MDC.put(Constants.MDC_START_TIME, String.valueOf(curTime));
         MDC.put(Constants.MDC_IP, getClientIP(request));
+        String language = request.getHeader(Constants.HEADER_LANGUAGE);
+        if (StringUtils.isEmpty(language)) {
+            language = Constants.LANGUAGE_DEFAULT;
+        }
+        MDC.put(Constants.MDC_LANGUAGE, language);
     }
 
     /**
@@ -39,6 +44,7 @@ public class TraceHelper {
         MDC.remove(Constants.MDC_URI);
         MDC.remove(Constants.MDC_START_TIME);
         MDC.remove(Constants.MDC_IP);
+        MDC.remove(Constants.MDC_LANGUAGE);
     }
 
     /**
