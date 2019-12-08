@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import vip.mystery0.base.springboot.model.ServiceApiException;
+import vip.mystery0.base.springboot.utils.trace.TraceHelper;
 import vip.mystery0.base.springboot.utils.trace.TraceLogUtil;
 import vip.mystery0.tools.kotlin.factory.ResponseFactory;
 import vip.mystery0.tools.kotlin.model.Response;
@@ -40,43 +41,49 @@ public abstract class BaseGlobalExceptionHandler {
         } else {
             errorMessage = exception.getMessage();
         }
-        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), errorMessage);
+        return response(HttpStatus.BAD_REQUEST.value(), errorMessage);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public Response<?> handleMethodArgumentTypeMismatchException() {
-        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
+        return response(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response<?> handleMissingServletRequestParameterException() {
-        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
+        return response(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public Response<?> handleNoHandlerFoundException(HttpServletRequest request) {
         TraceLogUtil.logRequest(request, properties.getLogMaxLength());
-        return ResponseFactory.failure(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
+        return response(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
     }
 
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Response<?> handleHttpRequestMethodNotSupportedException() {
-        return ResponseFactory.failure(HttpStatus.METHOD_NOT_ALLOWED.value(), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
+        return response(HttpStatus.METHOD_NOT_ALLOWED.value(), HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(BindException.class)
     public Response<?> handleBindException(BindException e) {
-        return ResponseFactory.failure(HttpStatus.BAD_REQUEST.value(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        return response(HttpStatus.BAD_REQUEST.value(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(ServiceApiException.class)
     public Response<?> handleServiceApiException(ServiceApiException e) {
+        TraceHelper.endTrace();
         return e.getResponse();
+    }
+
+    private Response<?> response(int code, String message) {
+        TraceHelper.endTrace();
+        return ResponseFactory.failure(code, message);
     }
 }

@@ -15,7 +15,5 @@ public interface ErrorResponseMessage {
         return HttpStatus.INTERNAL_SERVER_ERROR.value();
     }
 
-    String getPropertiesFileName();
-
     String getKey();
 }
