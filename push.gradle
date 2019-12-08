@@ -25,12 +25,6 @@ publish {
     bintrayKey = key                        // bintray账号api key
 }
 
-task moveJar(type: Copy) {
-    from file("$buildDir/libs/springboot-all.jar")
-    into file("$buildDir/libs")
-    rename '(.+)-all(.+)', '$1$2'
-}
-
 task fuck(group: 'publishing') {
     doFirst {
         if (null == user || null == key) {
@@ -39,7 +33,7 @@ task fuck(group: 'publishing') {
     }
     doLast {
         exec {
-            commandLine "./gradlew", 'clean', 'shadowJar', 'moveJar', 'bintrayUpload', '-PdryRun=false'
+            commandLine "./gradlew", 'clean', 'build', 'bintrayUpload', '-PdryRun=false'
         }
     }
 }
