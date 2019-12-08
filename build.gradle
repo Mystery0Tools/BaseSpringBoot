@@ -14,7 +14,7 @@ plugins {
     id 'java'
 }
 
-group 'vip.mystery0.base.springboot'
+group 'vip.mystery0'
 sourceCompatibility = 1.8
 
 repositories {
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'vip.mystery0.tools:java.tools:1.2.1'
+    compileOnly 'vip.mystery0.tools:java.tools:1.2.1'
     compileOnly 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.springframework.data:spring-data-redis'
     compileOnly 'org.springframework:spring-aspects'
