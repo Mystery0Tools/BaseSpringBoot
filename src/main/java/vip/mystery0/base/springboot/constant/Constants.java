@@ -20,4 +20,11 @@ public interface Constants {
      * 请求uri
      */
     String MDC_URI = "mdc_uri";
+    /**
+     * 返回信息的语言
+     */
+    String MDC_LANGUAGE = "mdc_language";
+
+    String HEADER_LANGUAGE = "Request-Language";
+    String LANGUAGE_DEFAULT = "DEFAULT";
 }
