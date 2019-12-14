@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'vip.mystery0.tools:java.tools:1.2.1'
+    compileOnly 'vip.mystery0.tools:java.tools:1.2.2'
     compileOnly 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.springframework.data:spring-data-redis'
     compileOnly 'org.springframework:spring-aspects'

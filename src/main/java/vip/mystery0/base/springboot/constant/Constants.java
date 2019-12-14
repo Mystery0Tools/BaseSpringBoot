@@ -24,6 +24,10 @@ public interface Constants {
      * 返回信息的语言
      */
     String MDC_LANGUAGE = "mdc_language";
+    /**
+     * 请求的域名
+     */
+    String MDC_REQUEST_HOST = "mdc_request_host";
 
     String HEADER_LANGUAGE = "Request-Language";
     String LANGUAGE_DEFAULT = "DEFAULT";
