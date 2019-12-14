@@ -4,6 +4,7 @@ import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
 import vip.mystery0.base.springboot.constant.Constants;
 import vip.mystery0.tools.java.utils.IPUtil;
+import vip.mystery0.tools.kotlin.utils.IPUtilKt;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class TraceHelper {
             language = Constants.LANGUAGE_DEFAULT;
         }
         MDC.put(Constants.MDC_LANGUAGE, language);
+        MDC.put(Constants.MDC_REQUEST_HOST, IPUtilKt.getHost(request));
     }
 
     /**
@@ -45,6 +47,7 @@ public class TraceHelper {
         MDC.remove(Constants.MDC_START_TIME);
         MDC.remove(Constants.MDC_IP);
         MDC.remove(Constants.MDC_LANGUAGE);
+        MDC.remove(Constants.MDC_REQUEST_HOST);
     }
 
     /**
