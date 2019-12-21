@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 @Service
 public class ResponseMessageService {
     private static final Logger log = LoggerFactory.getLogger(ResponseMessageService.class);
-    private static final Pattern BRACKET = Pattern.compile("{}");
+    private static final Pattern BRACKET = Pattern.compile("\\{\\w*}");
 
     private ConcurrentHashMap<String, ResourceBundle> map = new ConcurrentHashMap<>();
 
