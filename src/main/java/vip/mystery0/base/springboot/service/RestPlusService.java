@@ -16,7 +16,7 @@ import vip.mystery0.tools.kotlin.model.Response;
  */
 @Service
 public class RestPlusService {
-    private RestTemplatePlus<Response> restTemplatePlus;
+    private RestTemplatePlus<Response<?>> restTemplatePlus;
 
     public RestPlusService() {
         restTemplatePlus = new RestTemplatePlus<>(createRestTemplate(), e -> {
