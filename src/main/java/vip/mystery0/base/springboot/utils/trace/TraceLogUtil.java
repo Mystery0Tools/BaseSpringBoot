@@ -68,7 +68,7 @@ public class TraceLogUtil {
         try {
             return (System.currentTimeMillis() - Long.parseLong(MDC.get(Constants.MDC_START_TIME)));
         } catch (Exception e) {
-            log.warn("get cost time failed", e);
+            log.warn("get cost time failed");
             return null;
         }
     }
