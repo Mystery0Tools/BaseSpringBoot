@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 public class WebLogAspect {
-    public static void doWebLog(ProceedingJoinPoint joinPoint, int maxLength) throws Throwable {
+    public static Object doWebLog(ProceedingJoinPoint joinPoint, int maxLength) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         TraceHelper.beginTrace(request);
@@ -18,5 +18,6 @@ public class WebLogAspect {
         Object result = joinPoint.proceed();
         TraceLogUtil.logResponse(result);
         TraceHelper.endTrace();
+        return result;
     }
 }
