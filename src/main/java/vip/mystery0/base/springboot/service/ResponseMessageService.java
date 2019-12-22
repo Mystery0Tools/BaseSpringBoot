@@ -6,6 +6,7 @@ import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vip.mystery0.base.springboot.constant.Constants;
+import vip.mystery0.tools.java.factory.JsonFactory;
 
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,7 +55,7 @@ public class ResponseMessageService {
     public String fillTemplate(String template, Object... params) {
         String result = template;
         for (Object param : params) {
-            result = BRACKET.matcher(result).replaceFirst(param.toString());
+            result = BRACKET.matcher(result).replaceFirst(JsonFactory.toJson(param));
         }
         return result;
     }
