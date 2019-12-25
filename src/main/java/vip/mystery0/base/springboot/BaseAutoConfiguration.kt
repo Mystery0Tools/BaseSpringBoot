@@ -11,9 +11,9 @@ import vip.mystery0.base.springboot.utils.SnowflakeIdWorker
  */
 @Configuration
 @EnableConfigurationProperties(BaseProperties::class)
-open class BaseAutoConfiguration {
+class BaseAutoConfiguration {
     @Bean
-    open fun snowflakeIdWorker(): SnowflakeIdWorker {
+    fun snowflakeIdWorker(): SnowflakeIdWorker {
         return SnowflakeIdWorker()
     }
 }
