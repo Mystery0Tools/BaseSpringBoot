@@ -1,23 +1,23 @@
-package vip.mystery0.base.springboot.config;
+package vip.mystery0.base.springboot.config
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import vip.mystery0.base.springboot.utils.trace.TraceHelper;
-import vip.mystery0.base.springboot.utils.trace.TraceLogUtil;
+import org.aspectj.lang.ProceedingJoinPoint
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
+import vip.mystery0.base.springboot.utils.trace.TraceHelper
+import vip.mystery0.base.springboot.utils.trace.TraceLogUtil
+import java.util.*
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
+object WebLogAspect {
+    fun log(joinPoint: ProceedingJoinPoint, maxLength: Int): Any? = doWebLog(joinPoint, maxLength)
+}
 
-public class WebLogAspect {
-    public static Object doWebLog(ProceedingJoinPoint joinPoint, int maxLength) throws Throwable {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
-        TraceHelper.beginTrace(request);
-        TraceLogUtil.logRequest(request, maxLength);
-        Object result = joinPoint.proceed();
-        TraceLogUtil.logResponse(result);
-        TraceHelper.endTrace();
-        return result;
-    }
+fun doWebLog(joinPoint: ProceedingJoinPoint, maxLength: Int): Any? {
+    val attributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
+    val request = Objects.requireNonNull(attributes)!!.request
+    TraceHelper.beginTrace(request)
+    TraceLogUtil.logRequest(request, maxLength)
+    val result = joinPoint.proceed()
+    TraceLogUtil.logResponse(result)
+    TraceHelper.endTrace()
+    return result
 }

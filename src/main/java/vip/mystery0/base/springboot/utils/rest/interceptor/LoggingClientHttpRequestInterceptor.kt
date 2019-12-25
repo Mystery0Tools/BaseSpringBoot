@@ -1,33 +1,35 @@
-package vip.mystery0.base.springboot.utils.rest.interceptor;
+package vip.mystery0.base.springboot.utils.rest.interceptor
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.ClientHttpResponse;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import org.slf4j.LoggerFactory
+import org.springframework.http.HttpRequest
+import org.springframework.http.client.ClientHttpRequestExecution
+import org.springframework.http.client.ClientHttpRequestInterceptor
+import org.springframework.http.client.ClientHttpResponse
+import java.io.IOException
+import java.nio.charset.StandardCharsets
 
 /**
  * @author mystery0
  */
-public class LoggingClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
-    private static final Logger log = LoggerFactory.getLogger(LoggingClientHttpRequestInterceptor.class);
+class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
+    private val logger = LoggerFactory.getLogger(LoggingClientHttpRequestInterceptor::class.java)
 
-    @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        traceRequest(request, body);
-        return execution.execute(request, body);
+    @Throws(IOException::class)
+    override fun intercept(
+        request: HttpRequest,
+        body: ByteArray,
+        execution: ClientHttpRequestExecution
+    ): ClientHttpResponse {
+        traceRequest(request, body)
+        return execution.execute(request, body)
     }
 
-    private void traceRequest(HttpRequest request, byte[] body) {
-        log.debug("===========================request begin================================================");
-        log.debug("URI         : {}", request.getURI());
-        log.debug("Method      : {}", request.getMethod());
-        log.debug("Headers     : {}", request.getHeaders());
-        log.debug("Request body: {}", new String(body, StandardCharsets.UTF_8));
-        log.debug("==========================request end===================================================");
+    private fun traceRequest(request: HttpRequest, body: ByteArray) {
+        logger.debug("===========================request begin================================================")
+        logger.debug("URI         : {}", request.uri)
+        logger.debug("Method      : {}", request.method)
+        logger.debug("Headers     : {}", request.headers)
+        logger.debug("Request body: {}", String(body, StandardCharsets.UTF_8))
+        logger.debug("==========================request end===================================================")
     }
 }

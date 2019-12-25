@@ -1,19 +1,17 @@
-package vip.mystery0.base.springboot.config.result;
+package vip.mystery0.base.springboot.config.result
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus
 
 /**
  * @author mystery0
  * Create at 2019/12/8
  */
-public interface ErrorResponseMessage {
-    default String getMessage() {
-        return HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
-    }
+interface ErrorResponseMessage {
+    val message: String
+        get() = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase
 
-    default int getErrorCode() {
-        return HttpStatus.INTERNAL_SERVER_ERROR.value();
-    }
+    val errorCode: Int
+        get() = HttpStatus.INTERNAL_SERVER_ERROR.value()
 
-    String getKey();
+    val key: String
 }

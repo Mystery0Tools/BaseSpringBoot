@@ -1,78 +1,64 @@
-package vip.mystery0.base.springboot.utils.trace;
+package vip.mystery0.base.springboot.utils.trace
 
-import org.apache.tomcat.util.buf.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-import vip.mystery0.base.springboot.constant.Constants;
-import vip.mystery0.tools.java.factory.JsonFactory;
-import vip.mystery0.tools.java.utils.TimeUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import org.slf4j.LoggerFactory
+import org.slf4j.MDC
+import vip.mystery0.base.springboot.constant.MDC_START_TIME
+import vip.mystery0.base.springboot.constant.MDC_URI
+import vip.mystery0.tools.kotlin.factory.toJson
+import vip.mystery0.tools.kotlin.utils.formatDateTime
+import java.time.LocalDateTime
+import javax.servlet.http.HttpServletRequest
 
 /**
  * @author mystery0
  */
-public class TraceLogUtil {
-    private static final Logger log = LoggerFactory.getLogger(TraceLogUtil.class);
-
+object TraceLogUtil {
+    private val log = LoggerFactory.getLogger(TraceLogUtil::class.java)
     /**
      * 记录请求
      *
      * @param request   请求体
      * @param maxLength 参数打印最大长度
      */
-    public static void logRequest(HttpServletRequest request,
-                                  int maxLength) {
-        List<String> params = new ArrayList<>();
-        request.getParameterMap().forEach((s, strings) -> {
-            String value = StringUtils.join(strings);
-            if (value.length() > maxLength) {
-                String start = value.substring(0, 4);
-                String end = value.substring(value.length() - 4);
-                params.add(s + "=>" + start + "...." + end);
-            } else {
-                params.add(s + "=>" + value);
+    fun logRequest(request: HttpServletRequest, maxLength: Int) {
+        val params = request.parameterMap
+            .map { (s: String, strings: Array<String?>?) ->
+                {
+                    val value = strings.joinToString()
+                    if (value.length > maxLength) {
+                        val start = value.substring(0, 4)
+                        val end = value.substring(value.length - 4)
+                        "$s=>$start....$end"
+                    } else {
+                        "$s=>$value"
+                    }
+                }
             }
-        });
-        String args = StringUtils.join(params);
-
-        log.info("╔══════════════════════");
-        log.info("║ {}", TimeUtil.formatDateTime(LocalDateTime.now()));
-        log.info("║ {}", MDC.get(Constants.MDC_URI));
-        if (!"".equals(args)) {
-            log.info("║ params: 【{}】", params);
-        }
-        log.info("║ IP: {}", TraceHelper.getClientIP(request));
-        log.info("╙──────────────────────");
+        val args = params.joinToString()
+        log.info("╔══════════════════════")
+        log.info("║ {}", LocalDateTime.now().formatDateTime())
+        log.info("║ {}", MDC.get(MDC_URI))
+        if (args.isNotBlank())
+            log.info("║ params: 【{}】", params)
+        log.info("║ IP: {}", TraceHelper.getClientIP(request))
+        log.info("╙──────────────────────")
     }
 
-    public static void logResponse(Object result) {
-        log.info("╓──────────────────────");
-        Long costTime = getCostTime();
-        if (costTime != null) {
-            log.info("║ request cost time: {}ms", costTime);
-        }
-        log.info("║ {}", MDC.get(Constants.MDC_URI));
-        if (result != null) {
-            String json = JsonFactory.toJson(result);
-            log.info("║ return: {}", json);
-        }
-        log.info("╚══════════════════════");
+    fun logResponse(result: Any?) {
+        log.info("╓──────────────────────")
+        if (costTime != null)
+            log.info("║ request cost time: {}ms", costTime)
+        log.info("║ {}", MDC.get(MDC_URI))
+        if (result != null)
+            log.info("║ return: {}", result.toJson())
+        log.info("╚══════════════════════")
     }
 
-    private static Long getCostTime() {
-        try {
-            if (MDC.get(Constants.MDC_START_TIME) == null) {
-                return null;
-            }
-            return (System.currentTimeMillis() - Long.parseLong(MDC.get(Constants.MDC_START_TIME)));
-        } catch (Exception e) {
-            log.warn("get cost time failed");
-            return null;
+    private val costTime: Long?
+        get() = try {
+            if (MDC.get(MDC_START_TIME) == null) null else System.currentTimeMillis() - MDC.get(MDC_START_TIME).toLong()
+        } catch (e: Exception) {
+            log.warn("get cost time failed")
+            null
         }
-    }
 }

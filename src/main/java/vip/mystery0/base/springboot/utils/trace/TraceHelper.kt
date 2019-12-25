@@ -1,80 +1,76 @@
-package vip.mystery0.base.springboot.utils.trace;
+package vip.mystery0.base.springboot.utils.trace
 
-import org.slf4j.MDC;
-import org.springframework.util.StringUtils;
-import vip.mystery0.base.springboot.constant.Constants;
-import vip.mystery0.tools.java.utils.IPUtil;
-import vip.mystery0.tools.kotlin.utils.IPUtilKt;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.slf4j.MDC
+import org.springframework.util.StringUtils
+import vip.mystery0.base.springboot.constant.*
+import vip.mystery0.tools.java.utils.IPUtil
+import vip.mystery0.tools.kotlin.utils.host
+import java.util.*
+import java.util.regex.Pattern
+import javax.servlet.http.HttpServletRequest
 
 /**
  * @author mystery0
  */
-public class TraceHelper {
-
+object TraceHelper {
     /**
      * 开始追踪。
-     * <p>用于生成追踪信息，供拦截器、执行任务的线程调用。</p>
+     *
+     * 用于生成追踪信息，供拦截器、执行任务的线程调用。
      *
      * @param request Servlet 请求信息
      */
-    public static void beginTrace(HttpServletRequest request) {
-        long curTime = System.currentTimeMillis();
-        String traceId = generateTraceId();
-        MDC.put(Constants.MDC_TRACE_ID, traceId);
-        MDC.put(Constants.MDC_URI, request.getMethod() + " " + request.getRequestURI());
-        MDC.put(Constants.MDC_START_TIME, String.valueOf(curTime));
-        MDC.put(Constants.MDC_IP, getClientIP(request));
-        String language = request.getHeader(Constants.HEADER_LANGUAGE);
-        if (StringUtils.isEmpty(language)) {
-            language = Constants.LANGUAGE_DEFAULT;
-        }
-        MDC.put(Constants.MDC_LANGUAGE, language);
-        MDC.put(Constants.MDC_REQUEST_HOST, IPUtilKt.getHost(request));
+    fun beginTrace(request: HttpServletRequest) {
+        val curTime = System.currentTimeMillis()
+        val traceId = generateTraceId()
+        MDC.put(MDC_TRACE_ID, traceId)
+        MDC.put(MDC_URI, request.method + " " + request.requestURI)
+        MDC.put(MDC_START_TIME, curTime.toString())
+        MDC.put(MDC_IP, getClientIP(request))
+        var language = request.getHeader(HEADER_LANGUAGE)
+        if (language.isNullOrBlank())
+            language = LANGUAGE_DEFAULT
+        MDC.put(MDC_LANGUAGE, language)
+        MDC.put(MDC_REQUEST_HOST, request.host)
     }
 
     /**
      * 结束追踪。
-     * <p>用于执行任务的线程，在任务逻辑执行完毕，交还给线程池之前，调用它来清理日志数据。</p>
+     *
+     * 用于执行任务的线程，在任务逻辑执行完毕，交还给线程池之前，调用它来清理日志数据。
      */
-    public static void endTrace() {
-        MDC.remove(Constants.MDC_TRACE_ID);
-        MDC.remove(Constants.MDC_URI);
-        MDC.remove(Constants.MDC_START_TIME);
-        MDC.remove(Constants.MDC_IP);
-        MDC.remove(Constants.MDC_LANGUAGE);
-        MDC.remove(Constants.MDC_REQUEST_HOST);
+    fun endTrace() {
+        MDC.remove(MDC_TRACE_ID)
+        MDC.remove(MDC_URI)
+        MDC.remove(MDC_START_TIME)
+        MDC.remove(MDC_IP)
+        MDC.remove(MDC_LANGUAGE)
+        MDC.remove(MDC_REQUEST_HOST)
     }
 
     /**
      * 获取23位的追踪Id
      */
-    private static String generateTraceId() {
-        String uuid = UUID.randomUUID().toString();
-        uuid = uuid.replaceAll("-", "");
-        String regEx = "[^0-9]";
-        Pattern p = Pattern.compile(regEx);
-        Matcher m = p.matcher(uuid);
-        String uuidNumber = m.replaceAll("").trim();
-        uuidNumber = uuidNumber.replaceAll(" ", "");
-        String timeStr = String.valueOf(System.currentTimeMillis());
-
-        if (uuidNumber.length() > 10) {
-            uuidNumber = uuidNumber.substring(uuidNumber.length() - 10);
-        }
-        return timeStr + uuidNumber;
+    private fun generateTraceId(): String {
+        var uuid = UUID.randomUUID().toString()
+        uuid = uuid.replace("-".toRegex(), "")
+        val regEx = "[^0-9]"
+        val p = Pattern.compile(regEx)
+        val m = p.matcher(uuid)
+        var uuidNumber = m.replaceAll("").trim { it <= ' ' }
+        uuidNumber = uuidNumber.replace(" ".toRegex(), "")
+        val timeStr = System.currentTimeMillis().toString()
+        if (uuidNumber.length > 10)
+            uuidNumber = uuidNumber.substring(uuidNumber.length - 10)
+        return timeStr + uuidNumber
     }
 
-    public static String getClientIP(HttpServletRequest request) {
-        String ip = MDC.get(Constants.MDC_IP);
-        if (StringUtils.isEmpty(ip)) {
-            return IPUtil.getClientIP(request);
+    fun getClientIP(request: HttpServletRequest): String {
+        val ip = MDC.get(MDC_IP)
+        return if (ip.isNullOrBlank()) {
+            IPUtil.getClientIP(request)
         } else {
-            return ip;
+            ip
         }
     }
 }

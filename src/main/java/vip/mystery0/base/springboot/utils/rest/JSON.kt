@@ -1,14 +1,12 @@
-package vip.mystery0.base.springboot.utils.rest;
+package vip.mystery0.base.springboot.utils.rest
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference
 
 /**
  * @author Mystery0
  */
-public interface JSON {
-    <T> T fromJson(String json, Class<T> clazz);
-
-    <T> T fromJson(String json, TypeReference<T> typeReference);
-
-    <T> String toJson(T obj);
+interface JSON {
+    fun <T> fromJson(json: String, clazz: Class<T>): T
+    fun <T> fromJson(json: String, typeReference: TypeReference<T>): T
+    fun <T> toJson(obj: T): String
 }

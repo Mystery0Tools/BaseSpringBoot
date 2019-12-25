@@ -25,7 +25,7 @@ public class RedisService {
     private StringRedisTemplate redisTemplate;
 
     public String getRedisKey(String key) {
-        return properties.getRedisPrefix() + ":" + key;
+        return properties.redisPrefix + ":" + key;
     }
 
     /**
