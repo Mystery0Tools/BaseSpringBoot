@@ -46,7 +46,7 @@ class ResponseMessageService {
         } else result
     }
 
-    fun fillTemplate(template: String, vararg params: Any): String? {
+    fun fillTemplate(template: String, vararg params: Any): String {
         var result = template
         for (param in params) {
             result = BRACKET.matcher(result).replaceFirst(param.toJson())
