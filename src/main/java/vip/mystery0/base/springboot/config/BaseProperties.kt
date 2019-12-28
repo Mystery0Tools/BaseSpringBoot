@@ -9,4 +9,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class BaseProperties {
     var logMaxLength = 0
     lateinit var redisPrefix: String
+    var enableFuse = false
 }
