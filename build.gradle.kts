@@ -45,4 +45,8 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+java {
+    PublishConfig.sourceFiles = sourceSets["main"].java.srcDirs
+}
+
 apply(from = "push.gradle.kts")
