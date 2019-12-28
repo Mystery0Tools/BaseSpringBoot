@@ -1,3 +1,5 @@
+import java.io.File
+
 /**
  * @author mystery0
  * Create at 2019/12/25
@@ -12,4 +14,6 @@ object PublishConfig {
     const val POM_UPLOAD_NAME = "base-spring-boot-starter"
     const val POM_DESC = "SpringBoot basic framework"
     const val POM_WEBSITE = "https://github.com/Mystery0Tools/BaseSpringBoot"
+
+    lateinit var sourceFiles: Set<File>
 }

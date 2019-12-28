@@ -14,8 +14,13 @@ buildscript {
 
 apply<ReleasePlugin>()
 
-val USER = "USER"
-val KEY = "KEY"
+task("sourcesJar", Jar::class) {
+    archiveClassifier.set("sources")
+    from(PublishConfig.sourceFiles)
+}
+
+val USER = "BINTRAY_USER"
+val KEY = "BINTRAY_KEY"
 
 val properties = Properties()
 val propertiesFile = File("local.properties")
@@ -39,8 +44,8 @@ configure<PublishExtension> {
     desc = PublishConfig.POM_DESC                         // 仓库说明
     website = PublishConfig.POM_WEBSITE                   // 仓库地址
 
-    bintrayUser = user                      // bintray账号名
-    bintrayKey = key                        // bintray账号api key
+    bintrayUser = user                                    // bintray账号名
+    bintrayKey = key                                      // bintray账号api key
 
     dryRun = false
 }
@@ -57,7 +62,7 @@ task("fuck") {
     }
     doLast {
         exec {
-            commandLine("./gradlew", "clean", "shadowJar", "moveJar", "bintrayUpload")
+            commandLine("./gradlew", "clean", "sourcesJar", "shadowJar", "moveJar", "bintrayUpload")
         }
     }
 }
