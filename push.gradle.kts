@@ -14,8 +14,8 @@ buildscript {
 
 apply<ReleasePlugin>()
 
-val USER = "USER"
-val KEY = "KEY"
+val USER = "BINTRAY_USER"
+val KEY = "BINTRAY_KEY"
 
 val properties = Properties()
 val propertiesFile = File("local.properties")
