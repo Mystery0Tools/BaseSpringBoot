@@ -29,8 +29,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.50")
+    compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61")
+    compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.50")
     compileOnly("vip.mystery0.tools:java.tools:1.2.4")
     compileOnly("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.springframework.data:spring-data-redis")
