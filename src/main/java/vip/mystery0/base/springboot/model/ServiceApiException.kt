@@ -18,9 +18,7 @@ class ServiceApiException : RuntimeException {
     }
 
     constructor(message: ErrorResponseMessage, vararg params: Any) {
-        val responseMessageService = BaseApplicationContext.getBean(
-            ResponseMessageService::class.java
-        )
+        val responseMessageService = BaseApplicationContext.getBean(ResponseMessageService::class.java)
         var msg = responseMessageService.getTranslate(message.key, message.message)
         msg = responseMessageService.fillTemplate(msg, *params)
         response = failure(message.errorCode, msg)
