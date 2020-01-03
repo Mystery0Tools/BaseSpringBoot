@@ -1,7 +1,6 @@
 package vip.mystery0.base.springboot.utils.trace
 
 import org.slf4j.MDC
-import org.springframework.util.StringUtils
 import vip.mystery0.base.springboot.constant.*
 import vip.mystery0.tools.java.utils.IPUtil
 import vip.mystery0.tools.kotlin.utils.host
@@ -21,11 +20,11 @@ object TraceHelper {
      * @param request Servlet 请求信息
      */
     fun beginTrace(request: HttpServletRequest) {
-        val curTime = System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
         val traceId = generateTraceId()
         MDC.put(MDC_TRACE_ID, traceId)
         MDC.put(MDC_URI, request.method + " " + request.requestURI)
-        MDC.put(MDC_START_TIME, curTime.toString())
+        MDC.put(MDC_START_TIME, currentTime.toString())
         MDC.put(MDC_IP, getClientIP(request))
         var language = request.getHeader(HEADER_LANGUAGE)
         if (language.isNullOrBlank())
@@ -67,10 +66,6 @@ object TraceHelper {
 
     fun getClientIP(request: HttpServletRequest): String {
         val ip = MDC.get(MDC_IP)
-        return if (ip.isNullOrBlank()) {
-            IPUtil.getClientIP(request)
-        } else {
-            ip
-        }
+        return if (ip.isNullOrBlank()) IPUtil.getClientIP(request) else ip
     }
 }
