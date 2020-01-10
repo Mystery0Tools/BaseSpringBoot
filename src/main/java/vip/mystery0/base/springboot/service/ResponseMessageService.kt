@@ -25,20 +25,21 @@ class ResponseMessageService {
         map[locale] = resourceBundle
     }
 
-    private fun getResourceBundle(locale: String): ResourceBundle? {
+    private fun getResourceBundle(locale: String?): ResourceBundle? {
+        if (locale == null) return null
         return map[locale]
     }
 
     fun getTranslate(name: String): String {
         val defaultValue = getTranslate(name, LANGUAGE_DEFAULT, "default message")
-        return getTranslate(name, defaultValue)
+        return getTranslate(name, MDC.get(MDC_LANGUAGE), defaultValue)
     }
 
     fun getTranslate(name: String, defaultValue: String): String {
         return getTranslate(name, MDC.get(MDC_LANGUAGE), defaultValue)
     }
 
-    fun getTranslate(name: String, locale: String, defaultValue: String): String {
+    fun getTranslate(name: String, locale: String?, defaultValue: String): String {
         val resourceBundle = getResourceBundle(locale) ?: return defaultValue
         val result = resourceBundle.getString(name)
         return if (StringUtils.isEmpty(result)) {
