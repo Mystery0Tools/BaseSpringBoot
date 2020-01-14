@@ -38,13 +38,6 @@ class RestPlusService {
 
     fun <T> get(
         url: String,
-        type: Class<T>,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.get(url, type, mapper, uriVariables)
-
-    fun <T> get(
-        url: String,
         type: Type = Void::class.java,
         mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
@@ -57,14 +50,6 @@ class RestPlusService {
         mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): T? = restTemplatePlus.post(url, type.java, request, mapper, uriVariables)
-
-    fun <T> post(
-        url: String,
-        type: Class<T>,
-        request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.post(url, type, request, mapper, uriVariables)
 
     fun <T> post(
         url: String,
@@ -84,14 +69,6 @@ class RestPlusService {
 
     fun <T> put(
         url: String,
-        type: Class<T>,
-        request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.put(url, type, request, mapper, uriVariables)
-
-    fun <T> put(
-        url: String,
         type: Type = Void::class.java,
         request: Any? = null,
         mapper: ((Response<*>) -> T)? = null,
@@ -105,14 +82,6 @@ class RestPlusService {
         mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): T? = restTemplatePlus.delete(url, type.java, request, mapper, uriVariables)
-
-    fun <T> delete(
-        url: String,
-        type: Class<T>,
-        request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.delete(url, type, request, mapper, uriVariables)
 
     fun <T> delete(
         url: String,
