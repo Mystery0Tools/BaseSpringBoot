@@ -1,11 +1,9 @@
 package vip.mystery0.base.springboot.utils.rest.handler
 
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.client.ClientHttpResponse
-import org.springframework.stereotype.Component
 import org.springframework.web.client.ResponseErrorHandler
 import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.utils.rest.fuse.FuseService
@@ -15,14 +13,11 @@ import java.net.URI
 /**
  * @author mystery0
  */
-@Component
-class RestResponseErrorHandler : ResponseErrorHandler {
+class RestResponseErrorHandler(
+    private val fuseService: FuseService,
+    private val baseProperties: BaseProperties
+) : ResponseErrorHandler {
     private val logger = LoggerFactory.getLogger(RestResponseErrorHandler::class.java)
-
-    @Autowired
-    private lateinit var fuseService: FuseService
-    @Autowired
-    private lateinit var baseProperties: BaseProperties
 
     @Throws(IOException::class)
     override fun hasError(response: ClientHttpResponse): Boolean {
