@@ -41,9 +41,6 @@ dependencies {
     testImplementation("vip.mystery0.tools:java.tools:1.2.4")
     testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
     testImplementation("junit:junit:4.13")
 }
 

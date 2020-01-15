@@ -2,7 +2,6 @@ package vip.mystery0.base.springboot.service
 
 import com.fasterxml.jackson.core.type.TypeReference
 import org.junit.Test
-import org.slf4j.LoggerFactory
 import vip.mystery0.base.springboot.model.TestUser
 
 /**
@@ -10,8 +9,7 @@ import vip.mystery0.base.springboot.model.TestUser
  * Create at 2020/1/14
  */
 class RestPlusServiceTest {
-    private val logger = LoggerFactory.getLogger(RestPlusServiceTest::class.java)
-    private val restPlusService = RestPlusService()
+    private val restPlusService = RestPlusService.Proxy.createByTest()
 
     @Test
     fun get() {
@@ -19,9 +17,9 @@ class RestPlusServiceTest {
             "http://172.20.35.247/mock/447/obj",
             type = object : TypeReference<List<TestUser?>?>() {}.type
         )
-        logger.info("{}", list)
+        println(list)
         val response: String? = restPlusService.get("http://172.20.35.247/mock/447/null", String::class.java)
-        logger.info("{}", response)
+        println(response)
     }
 
     @Test
@@ -31,18 +29,18 @@ class RestPlusServiceTest {
             object : TypeReference<List<TestUser?>?>() {}.type,
             null
         )
-        logger.info("{}", list1)
+        println(list1)
         val list2: List<TestUser>? = restPlusService.post(
             "http://172.20.35.247/mock/447/obj/with",
             object : TypeReference<List<TestUser?>?>() {}.type,
             list1
         )
-        logger.info("{}", list2)
+        println(list2)
         val response: String? = restPlusService.post(
             "http://172.20.35.247/mock/447/null",
             String::class.java, null
         )
-        logger.info("{}", response)
+        println(response)
     }
 
     @Test
@@ -52,18 +50,18 @@ class RestPlusServiceTest {
             object : TypeReference<List<TestUser?>?>() {}.type,
             null
         )
-        logger.info("{}", list1)
+        println(list1)
         val list2: List<TestUser>? = restPlusService.put(
             "http://172.20.35.247/mock/447/obj/with",
             object : TypeReference<List<TestUser?>?>() {}.type,
             list1
         )
-        logger.info("{}", list2)
+        println(list2)
         val response: String? = restPlusService.put(
             "http://172.20.35.247/mock/447/null",
             String::class.java, null
         )
-        logger.info("{}", response)
+        println(response)
     }
 
     @Test
@@ -73,17 +71,17 @@ class RestPlusServiceTest {
             object : TypeReference<List<TestUser?>?>() {}.type,
             null
         )
-        logger.info("{}", list1)
+        println(list1)
         val list2: List<TestUser>? = restPlusService.delete(
             "http://172.20.35.247/mock/447/obj/with",
             object : TypeReference<List<TestUser?>?>() {}.type,
             list1
         )
-        logger.info("{}", list2)
+        println(list2)
         val response: String? = restPlusService.delete(
             "http://172.20.35.247/mock/447/null",
             String::class.java, null
         )
-        logger.info("{}", response)
+        println(response)
     }
 }

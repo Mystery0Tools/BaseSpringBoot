@@ -1,6 +1,7 @@
 package vip.mystery0.base.springboot.service
 
 import org.springframework.stereotype.Service
+import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
 import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.rest.JSON
@@ -19,6 +20,14 @@ import kotlin.reflect.KClass
  */
 @Service
 class RestPlusService {
+    object Proxy {
+        fun createByTest(): RestPlusService {
+            val instance = RestPlusService()
+            instance.restTemplatePlus.restTemplate.errorHandler = DefaultResponseErrorHandler()
+            return instance
+        }
+    }
+
     private val restTemplatePlus: RestTemplatePlus<Response<*>> = RestTemplatePlus(
         Response::class.java, { throw ServiceApiException(it) },
         object : JSON {
