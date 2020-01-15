@@ -1,5 +1,6 @@
 package vip.mystery0.base.springboot.service
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
@@ -20,6 +21,9 @@ import kotlin.reflect.KClass
  */
 @Service
 class RestPlusService {
+    @Autowired
+    private lateinit var restResponseErrorHandler: RestResponseErrorHandler
+
     object Proxy {
         fun createByTest(): RestPlusService {
             val instance = RestPlusService()
@@ -104,7 +108,7 @@ class RestPlusService {
     private fun createRestTemplate(): RestTemplate {
         val restTemplate = RestTemplate()
         restTemplate.interceptors.add(LoggingClientHttpRequestInterceptor())
-        restTemplate.errorHandler = RestResponseErrorHandler()
+        restTemplate.errorHandler = restResponseErrorHandler
         return restTemplate
     }
 }
