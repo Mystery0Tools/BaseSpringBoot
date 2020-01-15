@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
+import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.rest.JSON
 import vip.mystery0.base.springboot.utils.rest.RestTemplatePlus
+import vip.mystery0.base.springboot.utils.rest.fuse.FuseService
 import vip.mystery0.base.springboot.utils.rest.handler.RestResponseErrorHandler
 import vip.mystery0.base.springboot.utils.rest.interceptor.LoggingClientHttpRequestInterceptor
 import vip.mystery0.tools.kotlin.factory.fromJson
@@ -22,7 +24,9 @@ import kotlin.reflect.KClass
 @Service
 class RestPlusService {
     @Autowired
-    private lateinit var restResponseErrorHandler: RestResponseErrorHandler
+    private lateinit var fuseService: FuseService
+    @Autowired
+    private lateinit var baseProperties: BaseProperties
 
     object Proxy {
         fun createByTest(): RestPlusService {
@@ -108,7 +112,7 @@ class RestPlusService {
     private fun createRestTemplate(): RestTemplate {
         val restTemplate = RestTemplate()
         restTemplate.interceptors.add(LoggingClientHttpRequestInterceptor())
-        restTemplate.errorHandler = restResponseErrorHandler
+        restTemplate.errorHandler = RestResponseErrorHandler(fuseService, baseProperties)
         return restTemplate
     }
 }
