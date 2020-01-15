@@ -16,7 +16,7 @@ open class RestTemplatePlus<EXCEPTION>(
     private val exceptionClass: Class<EXCEPTION>,
     private val handler: (EXCEPTION) -> Unit,
     private val json: JSON,
-    private val restTemplate: RestTemplate
+    val restTemplate: RestTemplate
 ) {
     fun <T> get(
         url: String,

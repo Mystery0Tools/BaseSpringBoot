@@ -1,6 +1,7 @@
 package vip.mystery0.base.springboot.service
 
 import org.springframework.stereotype.Service
+import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
 import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.rest.JSON
@@ -11,6 +12,7 @@ import vip.mystery0.tools.kotlin.factory.fromJson
 import vip.mystery0.tools.kotlin.factory.toJson
 import vip.mystery0.tools.kotlin.model.Response
 import java.lang.reflect.Type
+import kotlin.reflect.KClass
 
 /**
  * @author mystery0
@@ -18,6 +20,14 @@ import java.lang.reflect.Type
  */
 @Service
 class RestPlusService {
+    object Proxy {
+        fun createByTest(): RestPlusService {
+            val instance = RestPlusService()
+            instance.restTemplatePlus.restTemplate.errorHandler = DefaultResponseErrorHandler()
+            return instance
+        }
+    }
+
     private val restTemplatePlus: RestTemplatePlus<Response<*>> = RestTemplatePlus(
         Response::class.java, { throw ServiceApiException(it) },
         object : JSON {
@@ -28,12 +38,27 @@ class RestPlusService {
         createRestTemplate()
     )
 
+    fun <T : Any> get(
+        url: String,
+        type: KClass<T>,
+        mapper: ((Response<*>) -> T)? = null,
+        vararg uriVariables: Any
+    ): T? = restTemplatePlus.get(url, type.java, mapper, uriVariables)
+
     fun <T> get(
         url: String,
         type: Type = Void::class.java,
         mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): T? = restTemplatePlus.get(url, type, mapper, uriVariables)
+
+    fun <T : Any> post(
+        url: String,
+        type: KClass<T>,
+        request: Any? = null,
+        mapper: ((Response<*>) -> T)? = null,
+        vararg uriVariables: Any
+    ): T? = restTemplatePlus.post(url, type.java, request, mapper, uriVariables)
 
     fun <T> post(
         url: String,
@@ -43,6 +68,14 @@ class RestPlusService {
         vararg uriVariables: Any
     ): T? = restTemplatePlus.post(url, type, request, mapper, uriVariables)
 
+    fun <T : Any> put(
+        url: String,
+        type: KClass<T>,
+        request: Any? = null,
+        mapper: ((Response<*>) -> T)? = null,
+        vararg uriVariables: Any
+    ): T? = restTemplatePlus.put(url, type.java, request, mapper, uriVariables)
+
     fun <T> put(
         url: String,
         type: Type = Void::class.java,
@@ -50,6 +83,14 @@ class RestPlusService {
         mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): T? = restTemplatePlus.put(url, type, request, mapper, uriVariables)
+
+    fun <T : Any> delete(
+        url: String,
+        type: KClass<T>,
+        request: Any? = null,
+        mapper: ((Response<*>) -> T)? = null,
+        vararg uriVariables: Any
+    ): T? = restTemplatePlus.delete(url, type.java, request, mapper, uriVariables)
 
     fun <T> delete(
         url: String,

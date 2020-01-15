@@ -36,6 +36,16 @@ dependencies {
     compileOnly("org.springframework.data:spring-data-redis")
     compileOnly("org.springframework:spring-aspects")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61")
+    testImplementation("vip.mystery0.tools:java.tools:1.2.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    testImplementation("junit:junit:4.13")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {
