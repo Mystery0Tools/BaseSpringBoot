@@ -2,14 +2,18 @@ package vip.mystery0.base.springboot.service
 
 import com.fasterxml.jackson.core.type.TypeReference
 import org.junit.Test
+import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.model.TestUser
+import vip.mystery0.base.springboot.utils.rest.fuse.FuseService
 
 /**
  * @author mystery0
  * Create at 2020/1/14
  */
 class RestPlusServiceTest {
-    private val restPlusService = RestPlusService.Proxy.createByTest()
+    private val fuseService = FuseService()
+    private val baseProperties = BaseProperties()
+    private val restPlusService = RestPlusService(fuseService, baseProperties)
 
     @Test
     fun get() {

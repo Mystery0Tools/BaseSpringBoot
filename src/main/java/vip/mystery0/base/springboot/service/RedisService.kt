@@ -3,7 +3,6 @@ package vip.mystery0.base.springboot.service
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.StringRedisTemplate
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
 import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.tools.java.factory.JsonFactory
@@ -14,7 +13,6 @@ import java.util.concurrent.TimeUnit
  * @author mystery0
  */
 @Service
-@Component
 class RedisService {
     companion object {
         private val log = LoggerFactory.getLogger(RedisService::class.java)
