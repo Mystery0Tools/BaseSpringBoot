@@ -1,8 +1,6 @@
 package vip.mystery0.base.springboot.service
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.web.client.DefaultResponseErrorHandler
 import org.springframework.web.client.RestTemplate
 import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.model.ServiceApiException
@@ -22,20 +20,10 @@ import kotlin.reflect.KClass
  * Create at 2019/12/25
  */
 @Service
-class RestPlusService {
-    @Autowired
-    private lateinit var fuseService: FuseService
-    @Autowired
-    private lateinit var baseProperties: BaseProperties
-
-    object Proxy {
-        fun createByTest(): RestPlusService {
-            val instance = RestPlusService()
-            instance.restTemplatePlus.restTemplate.errorHandler = DefaultResponseErrorHandler()
-            return instance
-        }
-    }
-
+class RestPlusService(
+    private val fuseService: FuseService,
+    private val baseProperties: BaseProperties
+) {
     private val restTemplatePlus: RestTemplatePlus<Response<*>> = RestTemplatePlus(
         Response::class.java, { throw ServiceApiException(it) },
         object : JSON {
