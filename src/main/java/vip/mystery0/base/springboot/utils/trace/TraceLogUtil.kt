@@ -37,7 +37,7 @@ object TraceLogUtil {
         val args = params.joinToString()
         log.info("╔══════════════════════")
         log.info("║ {}", LocalDateTime.now().formatDateTime())
-        log.info("║ {}", MDC.get(MDC_URI))
+        log.info("║ {} {}", request.method, request.requestURI)
         if (args.isNotBlank())
             log.info("║ params: 【{}】", params)
         log.info("║ IP: {}", TraceHelper.getClientIP(request))
