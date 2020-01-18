@@ -100,7 +100,15 @@ task("fuck") {
             if (PublishConfig.POM_SNAPSHOT)
                 commandLine("./gradlew", "clean", "sourcesJar", "shadowJar", "moveJar", "uploadArchives")
             else
-                commandLine("./gradlew", "clean", "sourcesJar", "shadowJar", "moveJar", "bintrayUpload")
+                commandLine(
+                    "./gradlew",
+                    "clean",
+                    "sourcesJar",
+                    "shadowJar",
+                    "moveJar",
+                    "uploadArchives",
+                    "bintrayUpload"
+                )
         }
     }
 }

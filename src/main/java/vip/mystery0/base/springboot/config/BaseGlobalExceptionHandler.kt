@@ -13,6 +13,7 @@ import org.springframework.web.servlet.NoHandlerFoundException
 import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.trace.TraceHelper.endTrace
 import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logRequest
+import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logRequestBody
 import vip.mystery0.tools.kotlin.factory.ResponseFactory.failure
 import vip.mystery0.tools.kotlin.model.Response
 import javax.servlet.http.HttpServletRequest
@@ -55,7 +56,7 @@ abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException::class)
     fun handleNoHandlerFoundException(request: HttpServletRequest?): Response<*> {
-        logRequest(request!!, properties!!.logMaxLength)
+        logRequest(request!!)
         return response(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.reasonPhrase)
     }
 
