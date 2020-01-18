@@ -1,5 +1,6 @@
 package vip.mystery0.base.springboot.utils.trace
 
+import org.aspectj.lang.ProceedingJoinPoint
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import vip.mystery0.base.springboot.constant.MDC_START_TIME
@@ -18,22 +19,27 @@ object TraceLogUtil {
      * 记录请求
      *
      * @param request   请求体
-     * @param body 请求体
      */
-    fun logRequest(request: HttpServletRequest) {
-        log.info("╓──────────────────────")
+    fun logRequest(request: HttpServletRequest, joinPoint: ProceedingJoinPoint) {
+        val args = joinPoint.args.toJson()
+        log.info("╔══════════════════════")
         log.info("║ {}", LocalDateTime.now().formatDateTime())
         log.info("║ {} {}", request.method, request.requestURI)
+        if (args.isNotBlank())
+            log.info("║ params: 【{}】", args)
         log.info("║ IP: {}", TraceHelper.getClientIP(request))
         log.info("╙──────────────────────")
     }
 
-    fun logRequestBody(body: String) {
-        if (body.isNotBlank()) {
-            log.info("╔══════════════════════")
+    fun logRequestBody(request: HttpServletRequest) {
+        val body = String(request.inputStream.readBytes())
+        log.info("╔══════════════════════")
+        log.info("║ {}", LocalDateTime.now().formatDateTime())
+        log.info("║ {} {}", request.method, request.requestURI)
+        if (body.isNotBlank())
             log.info("║ params: 【{}】", body)
-            log.info("╙──────────────────────")
-        }
+        log.info("║ IP: {}", TraceHelper.getClientIP(request))
+        log.info("╙──────────────────────")
     }
 
     fun logResponse(result: Any?) {

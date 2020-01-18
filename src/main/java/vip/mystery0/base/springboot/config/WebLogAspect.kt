@@ -15,7 +15,7 @@ fun doWebLog(joinPoint: ProceedingJoinPoint): Any? {
     val attributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
     val request = Objects.requireNonNull(attributes)!!.request
     TraceHelper.beginTrace(request)
-    TraceLogUtil.logRequest(request)
+    TraceLogUtil.logRequest(request, joinPoint)
     val result = joinPoint.proceed()
     TraceLogUtil.logResponse(result)
     TraceHelper.endTrace()

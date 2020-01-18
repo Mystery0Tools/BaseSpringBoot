@@ -1,6 +1,5 @@
 package vip.mystery0.base.springboot.config
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.validation.BindException
 import org.springframework.web.HttpRequestMethodNotSupportedException
@@ -12,7 +11,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException
 import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.trace.TraceHelper.endTrace
-import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logRequest
 import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logRequestBody
 import vip.mystery0.tools.kotlin.factory.ResponseFactory.failure
 import vip.mystery0.tools.kotlin.model.Response
@@ -25,9 +23,6 @@ import javax.validation.ValidationException
  */
 @RestControllerAdvice
 abstract class BaseGlobalExceptionHandler {
-    @Autowired
-    private val properties: BaseProperties? = null
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException::class)
     fun handleValidationException(exception: ValidationException): Response<*> {
@@ -56,7 +51,7 @@ abstract class BaseGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException::class)
     fun handleNoHandlerFoundException(request: HttpServletRequest?): Response<*> {
-        logRequest(request!!)
+        logRequestBody(request!!)
         return response(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.reasonPhrase)
     }
 

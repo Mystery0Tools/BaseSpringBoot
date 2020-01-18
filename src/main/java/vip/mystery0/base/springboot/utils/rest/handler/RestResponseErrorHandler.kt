@@ -21,16 +21,8 @@ class RestResponseErrorHandler(
 
     @Throws(IOException::class)
     override fun hasError(response: ClientHttpResponse): Boolean {
-        if (baseProperties.enableFuse) {
-            return true
-        } else {
-            if (response.statusCode != HttpStatus.OK) {
-                logger.warn("Status code: {} , text {}", response.statusCode, response.statusText)
-                logger.warn("Response: {}", response.body)
-                return true
-            }
-            return false
-        }
+        return if (baseProperties.enableFuse) true
+        else response.statusCode != HttpStatus.OK
     }
 
     override fun handleError(response: ClientHttpResponse) {}
