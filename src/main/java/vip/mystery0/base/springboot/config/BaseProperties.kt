@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  */
 @ConfigurationProperties(prefix = "base-config")
 class BaseProperties {
+    var logMaxLength = 0
     lateinit var redisPrefix: String
     var enableFuse = false
 }
