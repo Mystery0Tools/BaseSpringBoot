@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61")
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.3.50")
     testImplementation("vip.mystery0.tools:java.tools:1.2.4")
     testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
