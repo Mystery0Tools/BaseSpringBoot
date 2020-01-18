@@ -32,7 +32,7 @@ object TraceLogUtil {
     }
 
     fun logRequestBody(request: HttpServletRequest) {
-        val body = String(request.inputStream.readAllBytes())
+        val body = String(request.inputStream.readBytes())
         log.info("╔══════════════════════")
         log.info("║ {}", LocalDateTime.now().formatDateTime())
         log.info("║ {} {}", request.method, request.requestURI)
