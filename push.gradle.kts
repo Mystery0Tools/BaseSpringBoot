@@ -20,9 +20,6 @@ task("sourcesJar", Jar::class) {
     from(PublishConfig.sourceFiles)
 }
 
-val USER = if (PublishConfig.POM_SNAPSHOT) "NEXUS_USER" else "BINTRAY_USER"
-val KEY = if (PublishConfig.POM_SNAPSHOT) "NEXUS_KEY" else "BINTRAY_KEY"
-
 val properties = Properties()
 val propertiesFile = File("local.properties")
 val hasFile = if (propertiesFile.exists()) {
@@ -32,8 +29,10 @@ val hasFile = if (propertiesFile.exists()) {
     false
 }
 
-val user = if (hasFile) properties.getProperty(USER) else System.getenv(USER)
-val key = if (hasFile) properties.getProperty(KEY) else System.getenv(KEY)
+val NEXUS_USER = if (hasFile) properties.getProperty("NEXUS_USER") else System.getenv("NEXUS_USER")
+val NEXUS_KEY = if (hasFile) properties.getProperty("NEXUS_KEY") else System.getenv("NEXUS_KEY")
+val BINTRAY_USER = if (hasFile) properties.getProperty("BINTRAY_USER") else System.getenv("BINTRAY_USER")
+val BINTRAY_KEY = if (hasFile) properties.getProperty("BINTRAY_KEY") else System.getenv("BINTRAY_KEY")
 
 val url = System.getenv("NEXUS_URL") ?: PublishConfig.NEXUS_URL
 
@@ -47,8 +46,8 @@ configure<PublishExtension> {
     desc = PublishConfig.POM_DESC                         // 仓库说明
     website = PublishConfig.POM_WEBSITE                   // 仓库地址
 
-    bintrayUser = user                                    // bintray账号名
-    bintrayKey = key                                      // bintray账号api key
+    bintrayUser = BINTRAY_USER                                    // bintray账号名
+    bintrayKey = BINTRAY_KEY                                      // bintray账号api key
 
     dryRun = false
 }
@@ -59,11 +58,20 @@ tasks {
         repositories {
             withConvention(MavenRepositoryHandlerConvention::class) {
                 mavenDeployer {
-                    val compileVersion = "${PublishConfig.POM_VERSION}-SNAPSHOT"
+                    var compileVersion = "unspecific"
                     withGroovyBuilder {
-                        //快照版本的仓库
-                        "snapshotRepository"("url" to "$url/repository/maven-snapshots/") {
-                            "authentication"("userName" to user, "password" to key)
+                        compileVersion = if (PublishConfig.POM_SNAPSHOT) {
+                            //快照版本的仓库
+                            "snapshotRepository"("url" to "$url/repository/maven-snapshots/") {
+                                "authentication"("userName" to NEXUS_USER, "password" to NEXUS_KEY)
+                            }
+                            "${PublishConfig.POM_VERSION}-SNAPSHOT"
+                        } else {
+                            //正式发布仓库
+                            "repository"("url" to "$url/repository/maven-releases/") {
+                                "authentication"("userName" to NEXUS_USER, "password" to NEXUS_KEY)
+                            }
+                            PublishConfig.POM_VERSION
                         }
                     }
                     println("compile version: $compileVersion")
@@ -93,7 +101,9 @@ task("moveJar", Copy::class) {
 
 task("fuck") {
     doFirst {
-        if (user.isNullOrBlank() || key.isNullOrBlank()) throw kotlin.Exception("missing bintray.users or bintray.apikey in local.properties")
+        if (NEXUS_USER.isNullOrBlank() || NEXUS_KEY.isNullOrBlank()) throw kotlin.Exception("missing NEXUS_USER or NEXUS_KEY")
+        if (!PublishConfig.POM_SNAPSHOT)
+            if (BINTRAY_USER.isNullOrBlank() || BINTRAY_KEY.isNullOrBlank()) throw kotlin.Exception("missing BINTRAY_USER or BINTRAY_KEY")
     }
     doLast {
         exec {
