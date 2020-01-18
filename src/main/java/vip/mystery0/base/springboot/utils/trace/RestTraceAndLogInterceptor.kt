@@ -7,6 +7,7 @@ import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.utils.trace.TraceHelper.beginTrace
 import vip.mystery0.base.springboot.utils.trace.TraceHelper.endTrace
 import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logRequest
+import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logRequestBody
 import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.logResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -24,7 +25,7 @@ class RestTraceAndLogInterceptor : HandlerInterceptor {
         handler: Any
     ): Boolean {
         beginTrace(request)
-        logRequest(request, properties.logMaxLength)
+        logRequest(request)
         return true
     }
 

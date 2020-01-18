@@ -8,14 +8,14 @@ import vip.mystery0.base.springboot.utils.trace.TraceLogUtil
 import java.util.*
 
 object WebLogAspect {
-    fun log(joinPoint: ProceedingJoinPoint, maxLength: Int): Any? = doWebLog(joinPoint, maxLength)
+    fun log(joinPoint: ProceedingJoinPoint): Any? = doWebLog(joinPoint)
 }
 
-fun doWebLog(joinPoint: ProceedingJoinPoint, maxLength: Int): Any? {
+fun doWebLog(joinPoint: ProceedingJoinPoint): Any? {
     val attributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
     val request = Objects.requireNonNull(attributes)!!.request
     TraceHelper.beginTrace(request)
-    TraceLogUtil.logRequest(request, maxLength)
+    TraceLogUtil.logRequest(request)
     val result = joinPoint.proceed()
     TraceLogUtil.logResponse(result)
     TraceHelper.endTrace()

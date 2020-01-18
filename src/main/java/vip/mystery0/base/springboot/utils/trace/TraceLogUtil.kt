@@ -2,7 +2,6 @@ package vip.mystery0.base.springboot.utils.trace
 
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
-import org.springframework.http.MediaType
 import vip.mystery0.base.springboot.constant.MDC_START_TIME
 import vip.mystery0.base.springboot.constant.MDC_URI
 import vip.mystery0.tools.kotlin.factory.toJson
@@ -19,34 +18,22 @@ object TraceLogUtil {
      * 记录请求
      *
      * @param request   请求体
-     * @param maxLength 参数打印最大长度
+     * @param body 请求体
      */
-    fun logRequest(request: HttpServletRequest, maxLength: Int) {
-        val body = if (request.contentType == MediaType.APPLICATION_JSON_VALUE) {
-            String(request.inputStream.readBytes())
-        } else {
-            request.parameterMap
-                .map { (s: String, strings: Array<String?>?) ->
-                    {
-                        val value = strings.joinToString()
-                        if (value.length > maxLength) {
-                            val start = value.substring(0, 4)
-                            val end = value.substring(value.length - 4)
-                            "$s=>$start....$end"
-                        } else {
-                            "$s=>$value"
-                        }
-                    }
-                }
-                .joinToString()
-        }
-        log.info("╔══════════════════════")
+    fun logRequest(request: HttpServletRequest) {
+        log.info("╓──────────────────────")
         log.info("║ {}", LocalDateTime.now().formatDateTime())
         log.info("║ {} {}", request.method, request.requestURI)
-        if (body.isNotBlank())
-            log.info("║ params: 【{}】", body)
         log.info("║ IP: {}", TraceHelper.getClientIP(request))
         log.info("╙──────────────────────")
+    }
+
+    fun logRequestBody(body: String) {
+        if (body.isNotBlank()) {
+            log.info("╔══════════════════════")
+            log.info("║ params: 【{}】", body)
+            log.info("╙──────────────────────")
+        }
     }
 
     fun logResponse(result: Any?) {
