@@ -6,6 +6,7 @@ import org.slf4j.MDC
 import vip.mystery0.base.springboot.constant.MDC_START_TIME
 import vip.mystery0.base.springboot.constant.MDC_URI
 import vip.mystery0.tools.kotlin.factory.toJson
+import vip.mystery0.tools.kotlin.utils.doNoException
 import vip.mystery0.tools.kotlin.utils.formatDateTime
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
@@ -15,28 +16,35 @@ import javax.servlet.http.HttpServletRequest
  */
 object TraceLogUtil {
     private val log = LoggerFactory.getLogger(TraceLogUtil::class.java)
+
+    fun <R : Any?> Pair<R?, Exception?>.log(): R? {
+        if (second != null)
+            log.error("do something error", second)
+        return first
+    }
+
     /**
      * 记录请求
      *
      * @param request   请求体
      */
     fun logRequest(request: HttpServletRequest, joinPoint: ProceedingJoinPoint) {
-        val args = joinPoint.args.toJson()
+        val args = doNoException { joinPoint.args.toJson() }
         log.info("╔══════════════════════")
         log.info("║ {}", LocalDateTime.now().formatDateTime())
         log.info("║ {} {}", request.method, request.requestURI)
-        if (args.isNotBlank())
+        if (!args.isNullOrBlank())
             log.info("║ params: 【{}】", args)
         log.info("║ IP: {}", TraceHelper.getClientIP(request))
         log.info("╙──────────────────────")
     }
 
     fun logRequestBody(request: HttpServletRequest) {
-        val body = String(request.inputStream.readBytes())
+        val body = doNoException { String(request.inputStream.readBytes()) }
         log.info("╔══════════════════════")
         log.info("║ {}", LocalDateTime.now().formatDateTime())
         log.info("║ {} {}", request.method, request.requestURI)
-        if (body.isNotBlank())
+        if (!body.isNullOrBlank())
             log.info("║ params: 【{}】", body)
         log.info("║ IP: {}", TraceHelper.getClientIP(request))
         log.info("╙──────────────────────")

@@ -5,6 +5,8 @@ import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import vip.mystery0.base.springboot.utils.trace.TraceHelper
 import vip.mystery0.base.springboot.utils.trace.TraceLogUtil
+import vip.mystery0.base.springboot.utils.trace.TraceLogUtil.log
+import vip.mystery0.tools.kotlin.utils.doByTry
 import java.util.*
 
 object WebLogAspect {
@@ -15,9 +17,9 @@ fun doWebLog(joinPoint: ProceedingJoinPoint): Any? {
     val attributes = RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?
     val request = Objects.requireNonNull(attributes)!!.request
     TraceHelper.beginTrace(request)
-    TraceLogUtil.logRequest(request, joinPoint)
+    doByTry { TraceLogUtil.logRequest(request, joinPoint) }.log()
     val result = joinPoint.proceed()
-    TraceLogUtil.logResponse(result)
+    doByTry { TraceLogUtil.logResponse(result) }.log()
     TraceHelper.endTrace()
     return result
 }
