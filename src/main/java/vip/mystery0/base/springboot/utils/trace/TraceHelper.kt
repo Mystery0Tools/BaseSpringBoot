@@ -2,7 +2,7 @@ package vip.mystery0.base.springboot.utils.trace
 
 import org.slf4j.MDC
 import vip.mystery0.base.springboot.constant.*
-import vip.mystery0.tools.java.utils.IPUtil
+import vip.mystery0.tools.kotlin.utils.getClientIP
 import vip.mystery0.tools.kotlin.utils.host
 import java.util.*
 import java.util.regex.Pattern
@@ -25,7 +25,7 @@ object TraceHelper {
         MDC.put(MDC_TRACE_ID, traceId)
         MDC.put(MDC_URI, request.method + " " + request.requestURI)
         MDC.put(MDC_START_TIME, currentTime.toString())
-        MDC.put(MDC_IP, getClientIP(request))
+        MDC.put(MDC_IP, request.getClientIP())
         var language = request.getHeader(HEADER_LANGUAGE)
         if (language.isNullOrBlank())
             language = LANGUAGE_DEFAULT
@@ -66,6 +66,6 @@ object TraceHelper {
 
     fun getClientIP(request: HttpServletRequest): String {
         val ip = MDC.get(MDC_IP)
-        return if (ip.isNullOrBlank()) IPUtil.getClientIP(request) else ip
+        return if (ip.isNullOrBlank()) request.getClientIP() ?: "" else ip
     }
 }
