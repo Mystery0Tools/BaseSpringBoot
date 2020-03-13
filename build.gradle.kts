@@ -22,9 +22,7 @@ plugins {
 group = "vip.mystery0"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
-//val nexusUrl = System.getenv("NEXUS_URL") ?: "https://nexus3.mystery0.vip"
-//val nexusUrl = System.getenv("NEXUS_URL") ?: "http://mirror.nexus3.mystery0.vip:12315"
-val nexusUrl = System.getenv("NEXUS_URL") ?: "http://192.168.2.80:8081"
+val nexusUrl = System.getenv("NEXUS_URL") ?: PublishConfig.NEXUS_URL
 
 repositories {
     maven("$nexusUrl/repository/maven-public/")
