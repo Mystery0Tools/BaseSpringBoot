@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
-        maven("http://maven.aliyun.com/nexus/content/groups/public/")
+        maven("${PublishConfig.NEXUS_URL}/repository/maven-public/")
         mavenCentral()
     }
     dependencies {
@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id("org.springframework.boot") version "2.2.2.RELEASE"
+    id("org.springframework.boot") version "2.2.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("com.github.johnrengelman.shadow") version "5.2.0"
     kotlin("jvm") version "1.3.61"
