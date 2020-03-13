@@ -27,9 +27,9 @@ java.sourceCompatibility = JavaVersion.VERSION_1_8
 val nexusUrl = System.getenv("NEXUS_URL") ?: "http://192.168.2.80:8081"
 
 repositories {
+    maven("$nexusUrl/repository/maven-public/")
     maven("$nexusUrl/repository/maven-releases/")
     maven("$nexusUrl/repository/maven-snapshots/")
-    maven("http://maven.aliyun.com/nexus/content/groups/public/")
     mavenCentral()
 }
 
