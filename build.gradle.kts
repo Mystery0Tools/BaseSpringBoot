@@ -2,7 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
-        maven("${PublishConfig.NEXUS_URL}/repository/maven-public/")
+        val nexusUrl = System.getenv("NEXUS_URL") ?: PublishConfig.NEXUS_URL
+        maven("$nexusUrl/repository/maven-public/")
         mavenCentral()
     }
     dependencies {
