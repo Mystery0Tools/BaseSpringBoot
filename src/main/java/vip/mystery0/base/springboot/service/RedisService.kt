@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service
 import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.service.redis.IRedis
 import vip.mystery0.base.springboot.utils.withError
-import vip.mystery0.tools.java.factory.JsonFactory
+import vip.mystery0.tools.kotlin.factory.fromJson
+import vip.mystery0.tools.kotlin.factory.toJson
 import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.KClass
 
 /**
  * @author mystery0
@@ -40,7 +42,7 @@ class RedisService {
                 log.warn("put into redis but value is null, key: {}", redisKey)
                 return@withError
             }
-            val redisValue = JsonFactory.toJson(value)
+            val redisValue = value.toJson()
             log.debug("put into redis, key: {}, value: {}, expireTime: {}ms", redisKey, redisValue, expireTime)
             if (expireTime == -1L)
                 iRedis.set(redisKey, redisValue)
@@ -57,12 +59,44 @@ class RedisService {
      * @param <T>    数据类型
      * @return 原始数据
      */
+    fun <T : Any> getFromRedis(key: String, clazz: Class<T>): T? = log.withError<T>("get key value from redis error") {
+        val redisKey = getRedisKey(key)
+        log.debug("get key value from redis, key: {}", redisKey)
+        val redisValue = iRedis.get(redisKey) ?: return@withError null
+        log.debug("get value: {}", redisValue)
+        return@withError redisValue.fromJson(clazz)
+    }
+
+    /**
+     * 从redis中获取值
+     *
+     * @param key    键
+     * @param type   返回数据类型
+     * @param <T>    数据类型
+     * @return 原始数据
+     */
+    fun <T : Any> getFromRedis(key: String, clazz: KClass<T>): T? = log.withError<T>("get key value from redis error") {
+        val redisKey = getRedisKey(key)
+        log.debug("get key value from redis, key: {}", redisKey)
+        val redisValue = iRedis.get(redisKey) ?: return@withError null
+        log.debug("get value: {}", redisValue)
+        return@withError redisValue.fromJson(clazz)
+    }
+
+    /**
+     * 从redis中获取值
+     *
+     * @param key    键
+     * @param type   返回数据类型
+     * @param <T>    数据类型
+     * @return 原始数据
+     */
     fun <T> getFromRedis(key: String, type: Type): T? = log.withError<T>("get key value from redis error") {
         val redisKey = getRedisKey(key)
         log.debug("get key value from redis, key: {}", redisKey)
         val redisValue = iRedis.get(redisKey) ?: return@withError null
         log.debug("get value: {}", redisValue)
-        return@withError JsonFactory.fromJson(redisValue, type)
+        return@withError redisValue.fromJson(type)
     }
 
     /**
