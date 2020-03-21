@@ -1,8 +1,8 @@
-package vip.mystery0.base.springboot.config.redis.impl
+package vip.mystery0.base.springboot.service.redis.impl
 
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Repository
-import vip.mystery0.base.springboot.config.redis.IRedis
+import vip.mystery0.base.springboot.service.redis.IRedis
 import java.util.concurrent.TimeUnit
 
 /**

@@ -1,6 +1,5 @@
-package vip.mystery0.base.springboot.config.redis
+package vip.mystery0.base.springboot.service.redis
 
-import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 /**

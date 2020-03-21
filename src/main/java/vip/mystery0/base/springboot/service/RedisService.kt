@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import vip.mystery0.base.springboot.config.BaseProperties
-import vip.mystery0.base.springboot.config.redis.IRedis
+import vip.mystery0.base.springboot.service.redis.IRedis
 import vip.mystery0.base.springboot.utils.withError
 import vip.mystery0.tools.java.factory.JsonFactory
 import java.lang.reflect.Type
