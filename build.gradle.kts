@@ -35,7 +35,7 @@ repositories {
 dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61")
     compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.50")
-    compileOnly("vip.mystery0.tools:java.tools:1.2.7")
+    compileOnly("vip.mystery0.tools:java.tools:1.2.8")
     compileOnly("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.springframework.data:spring-data-redis")
     compileOnly("org.springframework:spring-aspects")
@@ -43,7 +43,7 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61")
     testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.3.50")
-    testImplementation("vip.mystery0.tools:java.tools:1.2.7")
+    testImplementation("vip.mystery0.tools:java.tools:1.2.8")
     testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("junit:junit:4.13")
