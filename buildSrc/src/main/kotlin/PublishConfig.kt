@@ -7,7 +7,7 @@ import java.io.File
 object PublishConfig {
     const val POM_GROUP_ID = "vip.mystery0"
     const val POM_ARTIFACT_ID = "base-spring-boot-starter"
-    const val POM_VERSION = "0.4.9"
+    const val POM_VERSION = "0.5.0"
 
     const val POM_REPO_NAME = "tools"
     const val POM_USER_ORG = "mystery00"
