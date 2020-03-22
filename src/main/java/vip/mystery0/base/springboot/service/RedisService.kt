@@ -15,6 +15,7 @@ import kotlin.reflect.KClass
 /**
  * @author mystery0
  */
+@Suppress("unchecked_cast")
 @Service
 class RedisService {
     companion object {
@@ -64,6 +65,7 @@ class RedisService {
         log.debug("get key value from redis, key: {}", redisKey)
         val redisValue = iRedis.get(redisKey) ?: return@withError null
         log.debug("get value: {}", redisValue)
+        if (clazz == String::class.java) return@withError redisValue as T?
         return@withError redisValue.fromJson(clazz)
     }
 
@@ -80,6 +82,7 @@ class RedisService {
         log.debug("get key value from redis, key: {}", redisKey)
         val redisValue = iRedis.get(redisKey) ?: return@withError null
         log.debug("get value: {}", redisValue)
+        if (clazz == String::class) return@withError redisValue as T?
         return@withError redisValue.fromJson(clazz)
     }
 
@@ -96,6 +99,7 @@ class RedisService {
         log.debug("get key value from redis, key: {}", redisKey)
         val redisValue = iRedis.get(redisKey) ?: return@withError null
         log.debug("get value: {}", redisValue)
+        if (type.typeName == String::class.java.typeName) return@withError redisValue as T?
         return@withError redisValue.fromJson(type)
     }
 
