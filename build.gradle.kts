@@ -35,6 +35,7 @@ dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
     compileOnly("vip.mystery0.tools:java.tools:1.2.9")
     compileOnly("org.springframework.boot:spring-boot-starter-web")
+    compileOnly("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.springframework.data:spring-data-redis")
     compileOnly("org.springframework:spring-aspects")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
