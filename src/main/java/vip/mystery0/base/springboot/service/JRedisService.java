@@ -138,6 +138,8 @@ public class JRedisService {
 
     /**
      * 删除指定的key
+     *
+     * @param key 键名
      */
     public void deleteRedisKey(String key) {
         String redisKey = getRedisKey(key);
