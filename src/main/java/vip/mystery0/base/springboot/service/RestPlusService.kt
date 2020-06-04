@@ -44,7 +44,6 @@ class RestPlusService(
     fun <T> getForEntity(
         url: String,
         type: Type = Void::class.java,
-        mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): ResponseEntity<T>? = restTemplatePlus.getForEntity(url, type, uriVariables)
 
@@ -60,7 +59,6 @@ class RestPlusService(
         url: String,
         type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): ResponseEntity<T>? = restTemplatePlus.postForEntity(url, type, request, uriVariables)
 
@@ -76,7 +74,6 @@ class RestPlusService(
         url: String,
         type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): ResponseEntity<T>? = restTemplatePlus.putForEntity(url, type, request, uriVariables)
 
@@ -92,7 +89,6 @@ class RestPlusService(
         url: String,
         type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
         vararg uriVariables: Any
     ): ResponseEntity<T>? = restTemplatePlus.deleteForEntity(url, type, request, uriVariables)
 
