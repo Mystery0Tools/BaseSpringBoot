@@ -25,6 +25,12 @@ open class RestTemplatePlus<EXCEPTION>(
         vararg uriVariables: Any
     ): T? = doRequestWithType(url, HttpMethod.GET, null, type, mapper, uriVariables)
 
+    fun <T> getForEntity(
+        url: String,
+        type: Type = Void::class.java,
+        vararg uriVariables: Any
+    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.GET, null, type, uriVariables)
+
     fun <T> post(
         url: String,
         type: Type = Void::class.java,
@@ -32,6 +38,13 @@ open class RestTemplatePlus<EXCEPTION>(
         mapper: ((EXCEPTION) -> T)? = null,
         vararg uriVariables: Any
     ): T? = doRequestWithType(url, HttpMethod.POST, request, type, mapper, uriVariables)
+
+    fun <T> postForEntity(
+        url: String,
+        type: Type = Void::class.java,
+        request: Any? = null,
+        vararg uriVariables: Any
+    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.POST, request, type, uriVariables)
 
     fun <T> put(
         url: String,
@@ -41,6 +54,13 @@ open class RestTemplatePlus<EXCEPTION>(
         vararg uriVariables: Any
     ): T? = doRequestWithType(url, HttpMethod.PUT, request, type, mapper, uriVariables)
 
+    fun <T> putForEntity(
+        url: String,
+        type: Type = Void::class.java,
+        request: Any? = null,
+        vararg uriVariables: Any
+    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.PUT, request, type, uriVariables)
+
     fun <T> delete(
         url: String,
         type: Type = Void::class.java,
@@ -48,6 +68,13 @@ open class RestTemplatePlus<EXCEPTION>(
         mapper: ((EXCEPTION) -> T)? = null,
         vararg uriVariables: Any
     ): T? = doRequestWithType(url, HttpMethod.DELETE, request, type, mapper, uriVariables)
+
+    fun <T> deleteForEntity(
+        url: String,
+        type: Type = Void::class.java,
+        request: Any? = null,
+        vararg uriVariables: Any
+    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.DELETE, request, type, uriVariables)
 
     private fun <T> doRequestWithType(
         url: String,
@@ -97,6 +124,18 @@ open class RestTemplatePlus<EXCEPTION>(
                 throw RuntimeException("you must throw exception in handler")
             }
         }
+    }
+
+    private fun <T> doRequestForEntity(
+        url: String,
+        httpMethod: HttpMethod,
+        request: Any?,
+        responseType: Type,
+        vararg uriVariables: Any
+    ): ResponseEntity<T>? {
+        val requestCallback = httpEntityCallback(request, responseType)
+        val responseExtractor = responseEntityExtractor<T>(responseType)
+        return restTemplate.execute(url, httpMethod, requestCallback, responseExtractor, uriVariables)
     }
 
     /**
