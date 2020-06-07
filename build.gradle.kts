@@ -33,7 +33,7 @@ repositories {
 dependencies {
     compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
     compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
-    compileOnly("vip.mystery0.tools:java.tools:1.2.9")
+    compileOnly("vip.mystery0.tools:java.tools:1.3.0")
     compileOnly("org.springframework.boot:spring-boot-starter-web")
     compileOnly("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("org.springframework.data:spring-data-redis")
@@ -42,7 +42,7 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
     testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
-    testImplementation("vip.mystery0.tools:java.tools:1.2.9")
+    testImplementation("vip.mystery0.tools:java.tools:1.3.0")
     testImplementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     testImplementation("junit:junit:4.13")
