@@ -1,5 +1,6 @@
 package vip.mystery0.base.springboot.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,15 @@ import java.util.concurrent.TimeUnit;
 public class JRedisService {
     private static final Logger log = LoggerFactory.getLogger(JRedisService.class);
 
+    private final BaseProperties properties;
+    private final IRedis iRedis;
+
     @Autowired
-    private BaseProperties properties;
-    @Autowired
-    private IRedis iRedis;
+    public JRedisService(ObjectMapper objectMapper, BaseProperties properties, IRedis iRedis) {
+        this.properties = properties;
+        this.iRedis = iRedis;
+        JsonFactory.setObjectMapper(objectMapper);
+    }
 
     public String getRedisKey(String key) {
         return properties.getRedisPrefix() + ":" + key;

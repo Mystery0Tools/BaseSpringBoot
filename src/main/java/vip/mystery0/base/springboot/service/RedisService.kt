@@ -1,11 +1,12 @@
 package vip.mystery0.base.springboot.service
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.service.redis.IRedis
 import vip.mystery0.base.springboot.utils.withError
+import vip.mystery0.tools.kotlin.factory.JsonFactory
 import vip.mystery0.tools.kotlin.factory.fromJson
 import vip.mystery0.tools.kotlin.factory.toJson
 import java.lang.reflect.Type
@@ -17,16 +18,18 @@ import kotlin.reflect.KClass
  */
 @Suppress("unchecked_cast")
 @Service
-class RedisService {
+class RedisService(
+    objectMapper: ObjectMapper,
+    private val properties: BaseProperties,
+    private val iRedis: IRedis
+) {
     companion object {
         private val log = LoggerFactory.getLogger(RedisService::class.java)
     }
 
-    @Autowired
-    private lateinit var properties: BaseProperties
-
-    @Autowired
-    private lateinit var iRedis: IRedis
+    init {
+        JsonFactory.setObjectMapper(objectMapper)
+    }
 
     fun getRedisKey(key: String): String = properties.redisPrefix + ":" + key
 
