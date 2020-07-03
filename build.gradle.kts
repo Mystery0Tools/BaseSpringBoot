@@ -63,4 +63,8 @@ java {
     PublishConfig.sourceFiles = sourceSets["main"].java.srcDirs
 }
 
+tasks.withType<Jar> {
+    enabled = true
+}
+
 apply(from = "push.gradle.kts")
