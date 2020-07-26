@@ -22,9 +22,6 @@ class BaseAutoConfiguration {
     fun snowflakeIdWorker(): SnowflakeIdWorker = SnowflakeIdWorker()
 
     @Bean
-    fun fuseService(): FuseService = FuseService()
-
-    @Bean
     fun restTemplate(fuseService: FuseService, baseProperties: BaseProperties): RestTemplate {
         val restTemplate = RestTemplate()
         //添加日志拦截器

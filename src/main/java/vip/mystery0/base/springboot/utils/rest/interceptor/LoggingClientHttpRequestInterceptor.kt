@@ -5,6 +5,7 @@ import org.springframework.http.HttpRequest
 import org.springframework.http.client.ClientHttpRequestExecution
 import org.springframework.http.client.ClientHttpRequestInterceptor
 import org.springframework.http.client.ClientHttpResponse
+import vip.mystery0.tools.java.utils.IOUtils
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 
@@ -13,7 +14,7 @@ import java.nio.charset.StandardCharsets
  */
 class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
     private val logger = LoggerFactory.getLogger(LoggingClientHttpRequestInterceptor::class.java)
-    
+
     @Throws(IOException::class)
     override fun intercept(
         request: HttpRequest,
@@ -40,7 +41,7 @@ class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
     @Throws(IOException::class)
     private fun traceResponse(response: ClientHttpResponse) {
         val body = if (response.headers.contentLength < 102400) {
-            String(response.body.readAllBytes(), StandardCharsets.UTF_8)
+            String(IOUtils.toByteArray(response.body), StandardCharsets.UTF_8)
         } else {
             "[[response body too big]]"
         }

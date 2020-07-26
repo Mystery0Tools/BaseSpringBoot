@@ -100,7 +100,7 @@ class Request private constructor() {
             filePartName: String?
         ): Builder {
             fileRequest = true
-            resource = FileSystemResource(file!!)
+            resource = FileSystemResource(file)
             request =
                 params ?: LinkedMultiValueMap<Any, Any>(0)
             this.mimeType = mimeType
@@ -204,6 +204,7 @@ class Request private constructor() {
             }
         }
 
+        @Suppress("unchecked_cast")
         private fun buildBody(request: Request) {
             if (fileRequest) {
                 val map =
