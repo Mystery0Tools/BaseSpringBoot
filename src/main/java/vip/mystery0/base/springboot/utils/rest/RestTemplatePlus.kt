@@ -218,25 +218,24 @@ open class RestTemplatePlus<EXCEPTION>(
             )
             return when (responseEntity.statusCode) {
                 HttpStatus.OK -> {
-                    return when {
-                        responseEntity.body.isNullOrBlank() -> null
-                        request.responseType == String::class.java -> responseEntity.body as T?
+                    when {
+                        responseEntity.body.isNullOrBlank() -> return null
+                        request.responseType == String::class.java -> return responseEntity.body as T?
                         request.responseType is Class<*> -> {
                             val body = responseEntity.body
-                            if (body.isNullOrBlank())
+                            return if (body.isNullOrBlank())
                                 null
                             else
                                 json.fromJson(body, request.responseType as Class<T>)
                         }
                         else -> {
                             val body = responseEntity.body
-                            if (body.isNullOrBlank())
+                            return if (body.isNullOrBlank())
                                 null
                             else
                                 json.fromJson(body, request.responseType)
                         }
                     }
-
                 }
                 HttpStatus.NO_CONTENT -> null
                 else -> {
