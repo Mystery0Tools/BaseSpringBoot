@@ -5,7 +5,11 @@ import org.springframework.http.client.ClientHttpRequest
 import org.springframework.http.client.ClientHttpResponse
 import org.springframework.http.converter.GenericHttpMessageConverter
 import org.springframework.http.converter.HttpMessageConverter
+import org.springframework.util.MultiValueMap
 import org.springframework.web.client.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.lang.reflect.Type
 
 /**
@@ -14,142 +18,244 @@ import java.lang.reflect.Type
  */
 open class RestTemplatePlus<EXCEPTION>(
     private val exceptionClass: Class<EXCEPTION>,
-    private val handler: (EXCEPTION) -> Unit,
+    private val handler: (HttpStatus, EXCEPTION) -> Unit,
     private val json: JSON,
     val restTemplate: RestTemplate
 ) {
     fun <T> get(
         url: String,
-        type: Type = Void::class.java,
-        mapper: ((EXCEPTION) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = doRequestWithType(url, HttpMethod.GET, null, type, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = doRequest(
+        Request.Builder()
+            .url(url)
+            .method(HttpMethod.GET)
+            .response(type)
+            .build()
+    )
 
     fun <T> getForEntity(
         url: String,
-        type: Type = Void::class.java,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.GET, null, type, uriVariables)
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = doRequestForEntity(
+        Request.Builder()
+            .url(url)
+            .method(HttpMethod.GET)
+            .response(type)
+            .build()
+    )
+
+    fun getFile(request: Request, targetPath: String) = getFile(request, File(targetPath))
+
+    fun getFile(request: Request, file: File) = getFile(request, FileOutputStream(file))
+
+    fun getFile(request: Request, outputStream: OutputStream) {
+        //定义请求头接收类型
+        request.requestEntity?.headers?.accept = arrayListOf(
+            MediaType.APPLICATION_OCTET_STREAM,
+            MediaType.ALL
+        )
+        //对响应进行流式处理而不是全部加载到内存中
+        restTemplate.execute(
+            request.uri,
+            request.httpMethod,
+            HttpEntityRequestCallback(request.requestEntity, Void::class.java),
+            ResponseExtractor<Void> {
+                it.body.copyTo(outputStream)
+                it.body.close()
+                outputStream.close()
+                null
+            })
+    }
 
     fun <T> post(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((EXCEPTION) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = doRequestWithType(url, HttpMethod.POST, request, type, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = doRequest(
+        Request.Builder()
+            .url(url)
+            .body(request)
+            .method(HttpMethod.POST)
+            .response(type)
+            .build()
+    )
 
     fun <T> postForEntity(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.POST, request, type, uriVariables)
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = doRequestForEntity(
+        Request.Builder()
+            .url(url)
+            .body(request)
+            .method(HttpMethod.POST)
+            .response(type)
+            .build()
+    )
+
+    fun <T> postFile(
+        url: String,
+        map: MultiValueMap<String, Any>? = null,
+        file: File,
+        mimeType: String,
+        type: Type = Void::class.java
+    ): T? = doRequest(
+        Request.Builder()
+            .url(url)
+            .fileBody(file, mimeType, map)
+            .method(HttpMethod.POST)
+            .response(type)
+            .build()
+    )
+
+    fun <T> postFile(
+        url: String,
+        map: MultiValueMap<String, Any>? = null,
+        byteArray: ByteArray,
+        fileName: String,
+        mimeType: String,
+        type: Type = Void::class.java
+    ): T? = doRequest(
+        Request.Builder()
+            .url(url)
+            .fileBody(byteArray, mimeType, fileName, map)
+            .method(HttpMethod.POST)
+            .response(type)
+            .build()
+    )
+
+    fun <T> postFileForEntity(
+        url: String,
+        map: MultiValueMap<String, Any>? = null,
+        file: File,
+        mimeType: String,
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = doRequestForEntity(
+        Request.Builder()
+            .url(url)
+            .fileBody(file, mimeType, map)
+            .method(HttpMethod.POST)
+            .response(type)
+            .build()
+    )
+
+    fun <T> postFileForEntity(
+        url: String,
+        map: MultiValueMap<String, Any>? = null,
+        byteArray: ByteArray,
+        fileName: String,
+        mimeType: String,
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = doRequestForEntity(
+        Request.Builder()
+            .url(url)
+            .fileBody(byteArray, mimeType, fileName, map)
+            .method(HttpMethod.POST)
+            .response(type)
+            .build()
+    )
 
     fun <T> put(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((EXCEPTION) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = doRequestWithType(url, HttpMethod.PUT, request, type, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = doRequest(
+        Request.Builder()
+            .url(url)
+            .body(request)
+            .method(HttpMethod.PUT)
+            .response(type)
+            .build()
+    )
 
     fun <T> putForEntity(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.PUT, request, type, uriVariables)
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = doRequestForEntity(
+        Request.Builder()
+            .url(url)
+            .body(request)
+            .method(HttpMethod.PUT)
+            .response(type)
+            .build()
+    )
 
     fun <T> delete(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((EXCEPTION) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = doRequestWithType(url, HttpMethod.DELETE, request, type, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = doRequest(
+        Request.Builder()
+            .url(url)
+            .body(request)
+            .method(HttpMethod.DELETE)
+            .response(type)
+            .build()
+    )
 
     fun <T> deleteForEntity(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = doRequestForEntity(url, HttpMethod.DELETE, request, type, uriVariables)
-
-    private fun <T> doRequestWithType(
-        url: String,
-        httpMethod: HttpMethod,
-        request: Any?,
-        type: Type,
-        mapper: ((EXCEPTION) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = doRequest(
-        url,
-        httpMethod,
-        request,
-        type,
-        mapper,
-        { json.fromJson(it, type) },
-        uriVariables
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = doRequestForEntity(
+        Request.Builder()
+            .url(url)
+            .body(request)
+            .method(HttpMethod.DELETE)
+            .response(type)
+            .build()
     )
 
     @Suppress("unchecked_cast")
-    private fun <T> doRequest(
-        url: String,
-        httpMethod: HttpMethod,
-        request: Any?,
-        responseType: Type,
-        mapper: ((EXCEPTION) -> T)? = null,
-        data: (String) -> T,
-        vararg uriVariables: Any
-    ): T? {
-        val requestCallback = httpEntityCallback(request, String::class.java)
-        val responseExtractor = responseEntityExtractor<String>(String::class.java)
-        val responseEntity =
-            restTemplate.execute(url, httpMethod, requestCallback, responseExtractor, uriVariables) ?: return null
-        when (responseEntity.statusCode) {
-            HttpStatus.OK -> {
-                if (responseEntity.body.isNullOrEmpty() || responseType == Void::class.java)
-                    return null
-                if (responseType == String::class.java)
-                    return responseEntity.body as T?
-                return if (responseEntity.body == null) null else data(responseEntity.body!!)
+    fun <T> doRequest(request: Request): T? {
+        try {
+            val responseEntity = restTemplate.exchange(
+                request.uri,
+                request.httpMethod,
+                request.requestEntity,
+                String::class.java
+            )
+            return when (responseEntity.statusCode) {
+                HttpStatus.OK -> {
+                    return when {
+                        responseEntity.body.isNullOrBlank() -> null
+                        request.responseType == String::class.java -> responseEntity.body as T?
+                        request.responseType is Class<*> -> {
+                            val body = responseEntity.body
+                            if (body.isNullOrBlank())
+                                null
+                            else
+                                json.fromJson(body, request.responseType as Class<T>)
+                        }
+                        else -> {
+                            val body = responseEntity.body
+                            if (body.isNullOrBlank())
+                                null
+                            else
+                                json.fromJson(body, request.responseType)
+                        }
+                    }
+
+                }
+                HttpStatus.NO_CONTENT -> null
+                else -> {
+                    val exception = json.fromJson(responseEntity.body!!, exceptionClass)
+                    handler(responseEntity.statusCode, exception)
+                    throw RuntimeException("you must throw exception in handler")
+                }
             }
-            HttpStatus.NO_CONTENT -> return null
-            else -> {
-                val exception =
-                    json.fromJson(responseEntity.body!!, exceptionClass)
-                mapper?.let { it(exception) }
-                handler(exception)
-                throw RuntimeException("you must throw exception in handler")
-            }
+        } catch (e: Exception) {
+            throw e
         }
     }
 
-    private fun <T> doRequestForEntity(
-        url: String,
-        httpMethod: HttpMethod,
-        request: Any?,
-        responseType: Type,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? {
-        val requestCallback = httpEntityCallback(request, responseType)
-        val responseExtractor = responseEntityExtractor<T>(responseType)
-        return restTemplate.execute(url, httpMethod, requestCallback, responseExtractor, uriVariables)
-    }
-
-    /**
-     * Returns a request callback implementation that writes the given object to the
-     * request stream.
-     */
-    protected open fun httpEntityCallback(requestBody: Any?, responseType: Type): RequestCallback =
-        HttpEntityRequestCallback(requestBody, responseType)
-
-    /**
-     * Returns a response extractor for [ResponseEntity].
-     */
-    protected open fun <T> responseEntityExtractor(responseType: Type): ResponseExtractor<ResponseEntity<T>> =
-        ResponseEntityResponseExtractor(responseType)
+    fun <T> doRequestForEntity(request: Request): ResponseEntity<T>? = restTemplate.execute(
+        request.uri,
+        request.httpMethod,
+        HttpEntityRequestCallback(request.requestEntity, request.responseType),
+        ResponseEntityResponseExtractor(request.responseType)
+    )
 
     /**
      * Request callback implementation that prepares the request's accept headers.
