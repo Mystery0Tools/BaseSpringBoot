@@ -8,8 +8,6 @@ import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.rest.JSON
 import vip.mystery0.base.springboot.utils.rest.RestTemplatePlus
 import vip.mystery0.base.springboot.utils.rest.fuse.FuseService
-import vip.mystery0.base.springboot.utils.rest.handler.RestResponseErrorHandler
-import vip.mystery0.base.springboot.utils.rest.interceptor.LoggingClientHttpRequestInterceptor
 import vip.mystery0.tools.kotlin.factory.fromJson
 import vip.mystery0.tools.kotlin.factory.toJson
 import vip.mystery0.tools.kotlin.model.Response
@@ -21,82 +19,61 @@ import java.lang.reflect.Type
  */
 @Service
 class RestPlusService(
-    private val fuseService: FuseService,
-    private val baseProperties: BaseProperties
+    restTemplate: RestTemplate
 ) {
     private val restTemplatePlus: RestTemplatePlus<Response<*>> = RestTemplatePlus(
-        Response::class.java, { throw ServiceApiException(it) },
+        Response::class.java, { _, exception -> throw ServiceApiException(exception) },
         object : JSON {
             override fun <T> fromJson(json: String, clazz: Class<T>): T = json.fromJson(clazz)
             override fun <T> fromJson(json: String, type: Type): T = json.fromJson(type)
             override fun <T> toJson(obj: T): String = obj.toJson()
         },
-        createRestTemplate()
+        restTemplate
     )
 
     fun <T> get(
         url: String,
-        type: Type = Void::class.java,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.get(url, type, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = restTemplatePlus.get(url, type)
 
     fun <T> getForEntity(
         url: String,
-        type: Type = Void::class.java,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = restTemplatePlus.getForEntity(url, type, uriVariables)
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = restTemplatePlus.getForEntity(url, type)
 
     fun <T> post(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.post(url, type, request, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = restTemplatePlus.post(url, request, type)
 
     fun <T> postForEntity(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = restTemplatePlus.postForEntity(url, type, request, uriVariables)
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = restTemplatePlus.postForEntity(url, request, type)
 
     fun <T> put(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.put(url, type, request, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = restTemplatePlus.put(url, request, type)
 
     fun <T> putForEntity(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = restTemplatePlus.putForEntity(url, type, request, uriVariables)
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = restTemplatePlus.putForEntity(url, request, type)
 
     fun <T> delete(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        mapper: ((Response<*>) -> T)? = null,
-        vararg uriVariables: Any
-    ): T? = restTemplatePlus.delete(url, type, request, mapper, uriVariables)
+        type: Type = Void::class.java
+    ): T? = restTemplatePlus.delete(url, request, type)
 
     fun <T> deleteForEntity(
         url: String,
-        type: Type = Void::class.java,
         request: Any? = null,
-        vararg uriVariables: Any
-    ): ResponseEntity<T>? = restTemplatePlus.deleteForEntity(url, type, request, uriVariables)
-
-
-    private fun createRestTemplate(): RestTemplate {
-        val restTemplate = RestTemplate()
-        restTemplate.interceptors.add(LoggingClientHttpRequestInterceptor())
-        restTemplate.errorHandler = RestResponseErrorHandler(fuseService, baseProperties)
-        return restTemplate
-    }
+        type: Type = Void::class.java
+    ): ResponseEntity<T>? = restTemplatePlus.deleteForEntity(url, request, type)
 }
