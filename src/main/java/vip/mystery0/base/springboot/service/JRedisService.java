@@ -61,7 +61,7 @@ public class JRedisService {
             log.warn("put into redis but value is null, key: {}", redisKey);
             return;
         }
-        String redisValue = JsonFactory.toJson(value);
+        String redisValue = value instanceof String ? (String) value : JsonFactory.toJson(value);
         log.debug("put into redis, key: {}, value: {}, expireTime: {}ms", redisKey, redisValue, expireTime);
         if (expireTime == -1L) {
             iRedis.set(redisKey, redisValue);

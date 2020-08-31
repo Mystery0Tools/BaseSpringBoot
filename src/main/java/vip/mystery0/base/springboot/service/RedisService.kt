@@ -46,7 +46,7 @@ class RedisService(
                 log.warn("put into redis but value is null, key: {}", redisKey)
                 return@withError
             }
-            val redisValue = value.toJson()
+            val redisValue = if (value is String) value else value.toJson()
             log.debug("put into redis, key: {}, value: {}, expireTime: {}ms", redisKey, redisValue, expireTime)
             if (expireTime == -1L)
                 iRedis.set(redisKey, redisValue)
