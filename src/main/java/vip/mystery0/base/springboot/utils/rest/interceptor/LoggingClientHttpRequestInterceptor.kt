@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets
  * @author mystery0
  */
 class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
-    private val logger = LoggerFactory.getLogger(LoggingClientHttpRequestInterceptor::class.java)
+    private val logger = LoggerFactory.getLogger("LoggingClientHttpRequestInterceptor")
 
     @Throws(IOException::class)
     override fun intercept(
@@ -22,15 +22,15 @@ class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
         execution: ClientHttpRequestExecution
     ): ClientHttpResponse {
         traceRequest(request, body)
+        val now = System.currentTimeMillis()
         val response = execution.execute(request, body)
-        traceResponse(response)
+        traceResponse(response, now)
         return response
     }
 
     private fun traceRequest(request: HttpRequest, body: ByteArray) {
         logger.debug("===========================request begin================================================")
-        logger.debug("URI         : {}", request.uri)
-        logger.debug("Method      : {}", request.method)
+        logger.debug("URI         : {} {}", request.method, request.uri)
         logger.debug("Headers     : {}", request.headers)
         if (body.size < 102400) {
             logger.debug("Request body: {}", String(body, StandardCharsets.UTF_8))
@@ -39,17 +39,17 @@ class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
     }
 
     @Throws(IOException::class)
-    private fun traceResponse(response: ClientHttpResponse) {
+    private fun traceResponse(response: ClientHttpResponse, now: Long) {
         val body = if (response.headers.contentLength < 102400) {
             String(IOUtils.toByteArray(response.body), StandardCharsets.UTF_8)
         } else {
             "[[response body too big]]"
         }
         logger.debug("============================response begin==========================================")
-        logger.debug("Status code  : {}", response.statusCode)
-        logger.debug("Status text  : {}", response.statusText)
+        logger.debug("Status code  : {} {}", response.statusCode, response.statusText)
         logger.debug("Headers      : {}", response.headers)
         logger.debug("Response body: {}", body)
+        logger.debug("Cost time    : {}ms", System.currentTimeMillis() - now)
         logger.debug("=======================response end=================================================")
     }
 }
