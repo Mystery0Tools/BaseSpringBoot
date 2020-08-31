@@ -163,16 +163,16 @@ class Request private constructor() {
 
         fun build(): Request {
             val request = Request()
-            val query = url.substringAfter("?")
+            val query = url.substringAfter("?", "")
             if (query.isNotBlank()) {
                 //包含query，编码
                 val queryArray = query.split("&").toTypedArray()
-                val host = url.substringBefore("?")
+                val host = url.substringBefore("?", "")
                 val array: MutableList<String> =
                     ArrayList(queryArray.size)
                 for (s in queryArray) {
-                    val key = s.substringBefore("=")
-                    val value = s.substringAfter("=")
+                    val key = s.substringBefore("=", "")
+                    val value = s.substringAfter("=", "")
                     try {
                         array.add(key + "=" + URLEncoder.encode(value, "UTF-8"))
                     } catch (e: UnsupportedEncodingException) {
