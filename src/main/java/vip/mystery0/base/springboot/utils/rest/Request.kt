@@ -223,9 +223,10 @@ class Request private constructor() {
                         httpHeaders
                     )
             } else {
-                if (this.request != null && httpHeaders != null) {
-                    request.requestEntity =
-                        HttpEntity(this.request, httpHeaders)
+                if (this.request is HttpEntity<*>) {
+                    request.requestEntity = this.request as HttpEntity<*>
+                } else if (this.request != null && httpHeaders != null) {
+                    request.requestEntity = HttpEntity(this.request, httpHeaders)
                 } else if (this.request != null) {
                     request.requestEntity = HttpEntity<Any?>(this.request!!)
                 } else if (httpHeaders != null) {
