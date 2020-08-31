@@ -15,8 +15,8 @@ object PublishConfig {
     const val POM_DESC = "SpringBoot basic framework"
     const val POM_WEBSITE = "https://github.com/Mystery0Tools/BaseSpringBoot"
 
-            const val POM_SNAPSHOT = true
-//    const val POM_SNAPSHOT = false
+//            const val POM_SNAPSHOT = true
+    const val POM_SNAPSHOT = false
     const val NEXUS_URL = "http://nexus3.mystery0.vip"
 
     lateinit var sourceFiles: Set<File>
