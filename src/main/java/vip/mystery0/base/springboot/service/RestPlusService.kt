@@ -3,11 +3,10 @@ package vip.mystery0.base.springboot.service
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import vip.mystery0.base.springboot.config.BaseProperties
 import vip.mystery0.base.springboot.model.ServiceApiException
 import vip.mystery0.base.springboot.utils.rest.JSON
+import vip.mystery0.base.springboot.utils.rest.Request
 import vip.mystery0.base.springboot.utils.rest.RestTemplatePlus
-import vip.mystery0.base.springboot.utils.rest.fuse.FuseService
 import vip.mystery0.tools.kotlin.factory.fromJson
 import vip.mystery0.tools.kotlin.factory.toJson
 import vip.mystery0.tools.kotlin.model.Response
@@ -76,4 +75,8 @@ class RestPlusService(
         request: Any? = null,
         type: Type = Void::class.java
     ): ResponseEntity<T>? = restTemplatePlus.deleteForEntity(url, request, type)
+
+    fun <T> doRequest(request: Request): T? = restTemplatePlus.doRequest<T>(request)
+
+    fun <T> doRequestForEntity(request: Request): ResponseEntity<T>? = restTemplatePlus.doRequestForEntity(request)
 }
