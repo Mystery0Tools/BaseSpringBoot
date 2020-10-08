@@ -61,12 +61,17 @@ public class JRedisService {
             log.warn("put into redis but value is null, key: {}", redisKey);
             return;
         }
-        String redisValue = value instanceof String ? (String) value : JsonFactory.toJson(value);
-        log.debug("put into redis, key: {}, value: {}, expireTime: {}ms", redisKey, redisValue, expireTime);
-        if (expireTime == -1L) {
-            iRedis.set(redisKey, redisValue);
-        } else {
-            iRedis.set(redisKey, redisValue, expireTime, TimeUnit.MILLISECONDS);
+        try {
+            String redisValue = value instanceof String ? (String) value : JsonFactory.toJson(value);
+            log.debug("put into redis, key: {}, value: {}, expireTime: {}ms", redisKey, redisValue, expireTime);
+            if (expireTime == -1L) {
+                iRedis.set(redisKey, redisValue);
+            } else {
+                iRedis.set(redisKey, redisValue, expireTime, TimeUnit.MILLISECONDS);
+            }
+        } catch (Exception e) {
+            log.error("put key value to redis error", e);
+            return;
         }
     }
 
