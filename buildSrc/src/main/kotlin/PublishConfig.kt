@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.get
  */
 object PublishConfig {
     private const val POM_GROUP_ID = "vip.mystery0.tools"
-    private const val POM_VERSION = "1.0.0"
+    private const val POM_VERSION = "1.0.1"
 
     private const val PROJECT_NAME = "base-spring-boot-starter"
     private const val PROJECT_DESCRIPTION = "SpringBoot basic framework"
