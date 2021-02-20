@@ -1,51 +1,40 @@
+import PublishConfig.configPublications
+import PublishConfig.configPublish
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
-        val nexusUrl = System.getenv("NEXUS_URL") ?: PublishConfig.NEXUS_URL
-        maven("$nexusUrl/repository/maven-public/")
+        maven("http://nexus3.mystery0.vip/repository/maven-public/")
+        maven("https://maven.aliyun.com/repository/public/")
         mavenCentral()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.72")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.30")
     }
 }
 
 plugins {
-    id("org.springframework.boot") version "2.3.1.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("com.github.johnrengelman.shadow") version "5.2.0"
-    kotlin("jvm") version "1.3.72"
-    kotlin("plugin.spring") version "1.3.72"
+    kotlin("jvm") version "1.4.30"
+    `maven-publish`
 }
 
 group = "vip.mystery0"
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
-val nexusUrl = System.getenv("NEXUS_URL") ?: PublishConfig.NEXUS_URL
-
 repositories {
-    maven("$nexusUrl/repository/maven-public/")
+    maven("http://nexus3.mystery0.vip/repository/maven-public/")
+    maven("https://maven.aliyun.com/repository/public/")
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
-    compileOnly("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
-    compileOnly("vip.mystery0.tools:java.tools:1.3.0")
-    compileOnly("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.springframework.boot:spring-boot-starter-validation")
-    compileOnly("org.springframework.data:spring-data-redis")
-    compileOnly("org.springframework:spring-aspects")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
-    testImplementation("vip.mystery0.tools:java.tools:1.3.0")
-    testImplementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("junit:junit:4.13")
+    implementation(kotlin("stdlib", org.jetbrains.kotlin.config.KotlinCompilerVersion.VERSION))
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    api("vip.mystery0.tools:java-tools:1.4.0")
+    api("org.zalando:logbook-spring-boot-starter:2.5.0")
+    api("com.ainemo:http-plus-spring-boot-starter:1.2.1")
+    compileOnly("org.springframework.boot:spring-boot-starter-web:2.4.0")
+    compileOnly("org.springframework.boot:spring-boot-autoconfigure:2.4.0")
 }
 
 tasks.withType<Test> {
@@ -60,11 +49,15 @@ tasks.withType<KotlinCompile> {
 }
 
 java {
-    PublishConfig.sourceFiles = sourceSets["main"].java.srcDirs
+    withSourcesJar()
 }
 
-tasks.withType<Jar> {
-    enabled = true
-}
+publishing {
+    configPublish(project)
 
-apply(from = "push.gradle.kts")
+    publications {
+        create<MavenPublication>("maven") {
+            configPublications(project, "base-spring-boot-starter")
+        }
+    }
+}
