@@ -67,7 +67,7 @@ class LoggingClientHttpRequestInterceptor : ClientHttpRequestInterceptor {
     private fun traceResponse(response: ClientHttpResponse) {
         val bodyString: String = when {
             isFileResponse(response.headers) -> "[[not json body]]"
-            response.headers.contentLength < MAX_BODY_SIZE -> String(response.body.readAllBytes())
+            response.headers.contentLength < MAX_BODY_SIZE -> String(response.body.readBytes())
             else -> "[[request body too big]]"
         }
         log.debug("============================response begin==========================================")
