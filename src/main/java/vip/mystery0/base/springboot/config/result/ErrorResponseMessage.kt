@@ -7,11 +7,11 @@ import org.springframework.http.HttpStatus
  * Create at 2019/12/8
  */
 interface ErrorResponseMessage {
+    val status: HttpStatus
+        get() = HttpStatus.INTERNAL_SERVER_ERROR
     val message: String
         get() = HttpStatus.INTERNAL_SERVER_ERROR.reasonPhrase
-
     val errorCode: Int
         get() = HttpStatus.INTERNAL_SERVER_ERROR.value()
-
     val key: String
 }
