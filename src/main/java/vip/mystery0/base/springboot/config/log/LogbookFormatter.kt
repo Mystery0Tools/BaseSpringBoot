@@ -28,7 +28,7 @@ class LogbookFormatter : HttpLogFormatter {
             writeBody(request.bodyAsString)
             log.trace("++++++++++++++++++== Request ==++++++++++++++++++")
         }
-        return null
+        return ""
     }
 
     override fun format(correlation: Correlation, response: HttpResponse): String? {
@@ -50,7 +50,7 @@ class LogbookFormatter : HttpLogFormatter {
             }
         }
         endTrace()
-        return null
+        return ""
     }
 
     private fun writeHeaders(headers: Map<String, List<String>>) {
